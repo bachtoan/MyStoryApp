@@ -8,7 +8,7 @@ import React from 'react'
 const HomeScreen = ({navigation}) => {
   return (
     <Button
-      title="Go to List profile"
+      title="Go to List story"
       onPress={() =>
         navigation.navigate('List', {name: 'ListStory'})
       }
