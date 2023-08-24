@@ -4,13 +4,16 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './source/HomeScreen';
 import ListStoryScreen from './source/ListStoryScreen';
+import CarGameScreen from './source/CarGameScreen';
 
 const Stack = createNativeStackNavigator();
 function MyStack(){
   return(
     <Stack.Navigator initialRouteName='Home'>
-      <Stack.Screen options={{ title: "Home"}} name="Home" component={HomeScreen} />
+      <Stack.Screen  name="Home" component={HomeScreen} />
       <Stack.Screen options={{ title: "List Story"}} name="List" component={ListStoryScreen} />
+      <Stack.Screen options={{ title: "Car Game"}} name="CarGame" component={CarGameScreen} />
+
     </Stack.Navigator>
   );
 }

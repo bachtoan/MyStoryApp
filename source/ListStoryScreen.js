@@ -1,6 +1,5 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, } from 'react-native'
 import React, { useState } from 'react'
-import { GluestackUIProvider, config,  Button, ButtonText } from '@gluestack-ui/themed'
 
 
 

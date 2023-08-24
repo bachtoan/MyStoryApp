@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../source/HomeScreen';
 import ListStoryScreen from '../source/ListStoryScreen';
+import CarGameScreen from '../source/CarGameScreen';
 
 const StackScreen = () => {
   return (
@@ -12,14 +13,20 @@ const StackScreen = () => {
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{title: 'Welcome'}}
+        
       />
 
       <Stack.Screen
         name="List"
         component={ListStoryScreen}
-        options={{title: 'List'}}
       />
+
+      <Stack.Screen
+        name="CarGame"
+        component={CarGameScreen}
+        
+
+        />
 
     </Stack.Navigator>
   </NavigationContainer>
