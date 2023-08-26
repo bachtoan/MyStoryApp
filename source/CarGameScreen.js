@@ -7,17 +7,6 @@ const CarGameScreen = () => {
     const [carScale, setCarScale] = useState(new Animated.Value(1));
     const navigation = useNavigation();
 
-    useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-        // Thay đổi cấu hình xoay ngang khi màn hình được hiển thị
-        navigation.setOptions({
-          orientation: 'landscape',
-        });
-      });
-  
-      return unsubscribe;
-    }, [navigation]);
-
     
 
     const moveCarToLane = (lane) => {
