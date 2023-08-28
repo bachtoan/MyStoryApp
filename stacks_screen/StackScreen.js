@@ -6,6 +6,7 @@ import HomeScreen from '../source/HomeScreen';
 import ListStoryScreen from '../source/ListStoryScreen';
 import CarGameScreen from '../source/CarGameScreen';
 import DetailStoryScreen from '../source/DetailStoryScreen';
+import AudioListScreen from '../source/AudioListScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const StackScreen = () => {
       <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
         <Stack.Screen options={{ headerShown: false }} name="List" component={ListStoryScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Audio" component={AudioListScreen}/>
         <Stack.Screen options={{ headerShown: false }} name="DetailStory" component={DetailStoryScreen} />
         <Stack.Screen options={{ title: "Car Game"}} name="CarGame" component={CarGameScreen} />
       </Stack.Navigator>

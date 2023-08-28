@@ -5,13 +5,18 @@ import {faAngleLeft} from '@fortawesome/free-solid-svg-icons'
 import {faBars} from '@fortawesome/free-solid-svg-icons'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
 import {faGear} from '@fortawesome/free-solid-svg-icons'
+import {faFileAudio} from '@fortawesome/free-solid-svg-icons'
+
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { library } from '@fortawesome/fontawesome-svg-core'
+import { useNavigation } from '@react-navigation/native'
 
 const Toolbar = ({ title, filter }) => {
     const [selected, setSelected] = React.useState("");
     const [isDropmenu, setIsDropmenu] = React.useState(false);
+    const navigation = useNavigation();
+
    
     const data = [
       {key:'1', value:'Tất cả danh sách', disabled:true},
@@ -78,8 +83,13 @@ const Toolbar = ({ title, filter }) => {
                 {isDropmenu && (
                         <View style={styles.dropmenubutton}>
                             <View style={styles.dropmenuview}>
-                                <TouchableOpacity style={{paddingBottom:10}}>
-                                    <FontAwesomeIcon icon={faPlus} size={30} color='#7091F5' />
+                                <TouchableOpacity style={{paddingBottom:10}}
+                                onPress={() => {
+                                    navigation.navigate("Audio")
+                                }}
+                                >
+                                    <FontAwesomeIcon icon={faFileAudio} size={30} color='#7091F5'  />
+                                    
                                 </TouchableOpacity>
                                 <TouchableOpacity>
                                     <FontAwesomeIcon icon={faGear} size={30} color='#7091F5' />

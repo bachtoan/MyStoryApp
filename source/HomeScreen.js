@@ -18,7 +18,7 @@ const HomeScreen = ({navigation}) => {
         .then((res) => res.json())
         .then((res) => {
           setData(res.story); 
-          // console.log(data);
+          // console.log(res.story);
         })
         .catch((error) => {
           console.error(error);
