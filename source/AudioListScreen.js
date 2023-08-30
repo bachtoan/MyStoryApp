@@ -15,7 +15,7 @@ export default function AudioListScreen() {
         .then((res) => res.json())
         .then((res) => {
             setData(res.original); 
-            console.log(res.original);
+            // console.log(res.original);
         })
         .catch((error) => {
             console.error(error);

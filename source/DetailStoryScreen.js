@@ -29,7 +29,6 @@ export default function DetailStoryScreen({route}) {
           const json = await response.json();
           if (response.status === 201) {
             setdata(json.data);
-            // console.log(data);
             setIsDataLoaded(true);
             ToastAndroid.show('Đã tìm thấy', ToastAndroid.SHORT);
           }
@@ -44,7 +43,7 @@ export default function DetailStoryScreen({route}) {
     }else{
       ToastAndroid.show('Đây là trang đầu tiên rồi', ToastAndroid.SHORT);
     }
-    
+                  
   }
   const NextPage = ()=>{
     if(currentPage < data.pages.length - 1){
@@ -63,6 +62,8 @@ export default function DetailStoryScreen({route}) {
         {isDataLoaded && (
           <View>
               <Text>{"Trang số: "  + data.pages[currentPage].page_number}</Text>
+              <Text>{"Background: "  + data.pages[currentPage].background}</Text>
+
               {data.pages[currentPage].contents.map(content => (
                 <View key={content.id}>
                   <Text>{"Contents: " + content.content}</Text>
