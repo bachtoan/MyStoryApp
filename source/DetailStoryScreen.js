@@ -15,6 +15,7 @@ import Toolbar from "./Toolbar";
 import { API_URL } from "./Host";
 import DemoCanvas from "./DemoCanvas";
 import ConfigTouchable from "./ConfigTouchable";
+import { useNavigation } from "@react-navigation/native";
 
 export default function DetailStoryScreen({ route }) {
   const { id, name } = route.params;
@@ -26,21 +27,10 @@ export default function DetailStoryScreen({ route }) {
   const [textPositionY, setOnTextPositionY] = useState();
   const [timeoutId, setTimeoutId] = useState(null);
   const [onTouch, setOnTouch] = useState(false);
+  
+  
 
-  const TouchHandle = (event) => {
-    const x = event.nativeEvent.locationX;
-    const y = event.nativeEvent.locationY;
-    setOnTouch(true);
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    const newTimeoutId = setTimeout(() => {
-      setOnTouch(false);
-    }, 2000);
-    setTimeoutId(newTimeoutId);
-    setOnTextPositionX(x);
-    setOnTextPositionY(y);
-  };
+  
 
   useEffect(() => {
     DetailStory(id);
@@ -89,7 +79,7 @@ export default function DetailStoryScreen({ route }) {
       <View style={{ flex: 1, position: "relative" }}>
         {isDataLoaded && (
           <View>
-            <Text>{"Trang số: "  + data.pages[currentPage].page_number}</Text>
+            {/* <Text>{"Trang số: "  + data.pages[currentPage].page_number}</Text>
               <Text>{"Background: "  + data.pages[currentPage].background}</Text>
 
               {data.pages[currentPage].contents.map(content => (
@@ -109,7 +99,7 @@ export default function DetailStoryScreen({ route }) {
                 </View>
               ))}
               <Button title="Trang trước" onPress={PreviousPage} />
-              <Button title="Trang sau" onPress={NextPage}  />
+              <Button title="Trang sau" onPress={NextPage}  /> */}
 
             <ImageBackground
               resizeMode="cover"

@@ -15,18 +15,13 @@ export default function SplashScreen() {
   const navigation = new useNavigation();
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      navigation.setOptions({
-        orientation: "portrait",
-        headerShown: false,
-      });
-    });
+    
     setTimeout(() => {
       navigation.navigate("Login")
       
     }, 1000);
 
-    return unsubscribe;
+   
   }, [navigation]);
 
   return (

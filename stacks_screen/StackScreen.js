@@ -20,17 +20,17 @@ const Stack = createNativeStackNavigator();
 const StackScreen = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Splash'>
-        <Stack.Screen options={{ headerShown: false }} name="Splash" component={SplashScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="List" component={ListStoryScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Audio" component={AudioListScreen}/>
-        <Stack.Screen options={{ headerShown: false }} name="DetailStory" component={DetailStoryScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="CoverStory" component={CoverStoryScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="CanvasSkia" component={DemoSkiaCanvas}/>
-        <Stack.Screen options={{ headerShown: false}} name="Canvas" component={DemoCanvas} />
+      <Stack.Navigator initialRouteName='CanvasSkia'>
+        <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Splash" component={SplashScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Login" component={LoginScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="SignUp" component={SignUpScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Home" component={HomeScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="List" component={ListStoryScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Audio" component={AudioListScreen}/>
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="DetailStory" component={DetailStoryScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CoverStory" component={CoverStoryScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CanvasSkia" component={DemoSkiaCanvas}/>
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape"}} name="Canvas" component={DemoCanvas} />
       </Stack.Navigator>
     </NavigationContainer>
     

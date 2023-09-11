@@ -3,13 +3,30 @@ import React, { useEffect, useState } from 'react'
 import Toolbar from './Toolbar';
 import { text } from '@fortawesome/fontawesome-svg-core';
 import { API_URL } from './Host';
+import { getData } from '../async_storage/MyStorage';
 
 const HomeScreen = ({navigation}) => {
+  
 
   let [data, setData] = useState([]);
 
     React.useEffect(() => {
       getStorys();
+        getData('user').then((user) => {
+            if (user) {
+                console.log('Dữ liệu người dùng:', user);
+            } else {
+                console.log('Không tìm thấy dữ liệu người dùng.');
+            }
+        });
+        getData('access_token').then((access_token) => {
+          if (access_token) {
+              console.log('Dữ liệu người dùng:', access_token);
+          } else {
+              console.log('Không tìm thấy dữ liệu người dùng.');
+          }
+      });
+    
     }, [])
     
   

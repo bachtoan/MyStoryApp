@@ -1,12 +1,23 @@
-import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase, View } from 'react-native'
-import React, { useCallback } from 'react'
+import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, ToastAndroid, TouchableOpacity, TouchableOpacityBase, View } from 'react-native'
+import React, { useCallback, useState } from 'react'
 import { TextInput } from '@react-native-material/core'
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useNavigation } from '@react-navigation/native';
+import { API_URL } from './Host';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../reducers/AuthReducer';
+import {saveData} from '../async_storage/MyStorage';
 
 
 export default function  LoginScreen() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [validataEmail, setValidataEmail] = useState('');
+  const [validataPass, setValidataPass] = useState('');
+
+
+
   const navigation = useNavigation();
   const [fontsLoaded] = useFonts({
     'Pacifico-Regular': require('../assets/font/Pacifico-Regular.ttf'),
@@ -21,6 +32,57 @@ export default function  LoginScreen() {
   if (!fontsLoaded) {
     return null;
   }
+
+  const Login = async (email, password) => {
+
+    await fetch(API_URL+"login", {
+        method: "POST",
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "email": email,
+            "password": password,         
+        })
+    })
+        .then((res) => {
+            if (res.status === 201) {
+              res.json().then(data => {
+                
+                console.log(data);
+    
+                if (data && data.user && data.access_token) {
+                    const { user, access_token } = data;
+                    saveData('user', user);
+                    saveData('access_token', access_token);
+                    navigation.navigate('Home')
+                    ToastAndroid.show('Đăng nhập thành công.', ToastAndroid.SHORT);
+                } else {
+                    console.log('Dữ liệu phản hồi không hợp lệ.');
+                    ToastAndroid.show('Dữ liệu phản hồi không hợp lệ.', ToastAndroid.SHORT);
+                }
+            });
+            } else if(res.status === 404){
+              ToastAndroid.show('Tài khoản không tồn tại', ToastAndroid.SHORT);
+              setValidataEmail('Tài khoản không tồn tại')
+            } else if(res.status === 403){
+              ToastAndroid.show('Mật khẩu sai', ToastAndroid.SHORT);
+              setValidataPass('Sai mật khẩu')
+            }
+        })
+        .catch(e => {
+            console.log(e);
+            ToastAndroid.show('Đăng nhập thất bại.', ToastAndroid.SHORT);
+        })
+}
+
+function onLogin(){
+  setValidataEmail('');
+  setValidataPass('');
+  console.log(email, password);
+  Login(email, password);
+}
 
   return (
     <ImageBackground 
@@ -41,16 +103,17 @@ export default function  LoginScreen() {
           <Text style={styles.dangnhap} >Đăng nhập</Text>  
         </View>
         <View style={styles.viewof_text_input}>
-          <TextInput variant="outlined" label="Tài khoản hoặc Email" style={{color:'black'}} />
-          <Text>Tài khoản không tồn tại</Text>
+          <TextInput variant="outlined" label="Tài khoản hoặc Email" style={{color:'black'}} onChangeText={setEmail} />
+          <Text>{validataEmail}</Text>
         </View>
         <View style={styles.viewof_text_input}>
-          <TextInput variant="outlined" secureTextEntry label="Mật khẩu" style={{color:'black' }}  />
-          <Text>Mật khẩu không chính xác</Text>
+          <TextInput variant="outlined" secureTextEntry label="Mật khẩu" style={{color:'black' }} onChangeText={setPassword} />
+          <Text>{validataPass}</Text>
         </View>
 
         <TouchableOpacity
           style={styles.btnLogin}
+          onPress={onLogin}
         >
           <Text style={{color:'white', fontSize:20}}>Đăng nhập</Text>
         </TouchableOpacity>
