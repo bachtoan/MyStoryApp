@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   TouchableOpacityBase,
   View,
@@ -16,6 +17,8 @@ import React, { useCallback, useState } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useNavigation } from "@react-navigation/native";
+import { faEquals } from "@fortawesome/free-solid-svg-icons";
+import { API_URL } from "./Host";
 
 
 export default function LoginScreen() {
@@ -23,6 +26,13 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
+
+  const [validatePass,setValidatePass] = useState('');
+  const [validateUser,setValidateUser] = useState('');
+  const [validateEmail,setValidateEmail] = useState('');
+
+
+
   const navigation = useNavigation();
 
   const [fontsLoaded] = useFonts({
@@ -38,12 +48,71 @@ export default function LoginScreen() {
   if (!fontsLoaded) {
     return null;
   }
+  const SignUp = async (username, email, password, re_password) => {
+
+    await fetch(API_URL+"register", {
+        method: "POST",
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "username": username,
+            "email": email,
+            "admin": 1,
+            "password": password,
+            "re_password": re_password         
+        })
+    })
+        .then((res) => {
+            if (res.status === 201) {
+              ToastAndroid.show('Đăng ký thành công', ToastAndroid.SHORT);
+              setUsername('');
+              setEmail('');
+              setPassword('');
+              setRePassword('');
+              navigation.goBack();
+            }else if (res.status === 500){
+              ToastAndroid.show('Tên tài khoản hoặc email đã được đăng ký', ToastAndroid.SHORT);
+            }           
+        })
+        .catch(e => {
+            console.log(e);
+            ToastAndroid.show('Đăng ký thất bại.', ToastAndroid.SHORT);
+        })
+}
+
+
 
   function SubmitRegigter(){
-    console.log(username);
-    console.log(email);
-    console.log(password);
-    console.log(rePassword);
+    setValidateEmail('');
+    setValidatePass('');
+    setValidateUser('');
+    if(!username) {
+        setValidateUser("Không được để trống")
+        return
+      }
+      if(!email) {
+        setValidateEmail("Không được để trống Email")
+        return
+      }
+
+      if(!password || !rePassword) {
+        setValidatePass("Không được để trống Password")
+        return
+      }
+
+      if (password === rePassword) {
+        console.log('Mật khẩu trùng khớp:', password);    
+        SignUp(username, email, password, rePassword)
+        setValidatePass('');
+
+      } else {
+        // console.log('Mật khẩu không khớp.');
+        setValidatePass("Nhập lại mật khẩu không đúng")
+        return
+      }
+   
 
   }
 
@@ -75,6 +144,7 @@ export default function LoginScreen() {
             onChangeText={setUsername}
           />
         </View>
+        <Text style={styles.text_message}>{validateUser}</Text>
         <View style={styles.viewof_text_input}>
           <TextInput
             placeholder="Email"
@@ -83,6 +153,8 @@ export default function LoginScreen() {
             onChangeText={setEmail}
           />
         </View>
+        <Text style={styles.text_message}>{validateEmail}</Text>
+
         <View style={styles.viewof_text_input}>
           <TextInput
             placeholder="Password"
@@ -92,7 +164,8 @@ export default function LoginScreen() {
             onChangeText={setPassword}
           />
         </View>
-        
+        <Text style={styles.text_message}>{validatePass}</Text>
+
         <View style={styles.viewof_text_input}>
           <TextInput
             placeholder="Re-Password"
@@ -101,6 +174,7 @@ export default function LoginScreen() {
             onChangeText={setRePassword}
           />
         </View>
+        <Text style={styles.text_message}>{validatePass}</Text>
 
         <TouchableOpacity style={styles.btnLogin} onPress={SubmitRegigter}>
           <Text style={{ color: "white", fontSize: 20 }}>Đăng ký</Text>
@@ -110,7 +184,7 @@ export default function LoginScreen() {
           <Text>Bạn đã có tài khoản? </Text>
           <TouchableOpacity
             onPress={()=>{
-                navigation.navigate('Login')
+                navigation.goBack();
             }}>
             <Text style={{ color: "red", textDecorationLine: "underline" }}>
               Đăng nhập ngay
@@ -185,4 +259,8 @@ const styles = StyleSheet.create({
     borderRadius:10,
     marginTop: 10,
   },
+
+  text_message: {
+    paddingHorizontal:20,
+  }
 });

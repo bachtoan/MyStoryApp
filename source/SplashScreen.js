@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import AnimatedLoader from "react-native-animated-loader";
+import { getData } from '../async_storage/MyStorage';
 
 export default function SplashScreen() {
   const navigation = new useNavigation();
@@ -17,9 +18,16 @@ export default function SplashScreen() {
   useEffect(() => {
     
     setTimeout(() => {
-      navigation.navigate("Login")
       
-    }, 1000);
+      getData('user').then((user) => {
+        if (user) {
+          navigation.replace("Home");
+
+        } else {
+          navigation.replace("Login");
+        }
+    });
+    }, 3000);
 
    
   }, [navigation]);

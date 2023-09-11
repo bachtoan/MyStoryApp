@@ -1,6 +1,5 @@
-import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, ToastAndroid, TouchableOpacity, TouchableOpacityBase, View } from 'react-native'
+import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, StyleSheet,TextInput, Text, ToastAndroid, TouchableOpacity, TouchableOpacityBase, View } from 'react-native'
 import React, { useCallback, useState } from 'react'
-import { TextInput } from '@react-native-material/core'
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useNavigation } from '@react-navigation/native';
@@ -56,7 +55,7 @@ export default function  LoginScreen() {
                     const { user, access_token } = data;
                     saveData('user', user);
                     saveData('access_token', access_token);
-                    navigation.navigate('Home')
+                    navigation.replace('Home')
                     ToastAndroid.show('Đăng nhập thành công.', ToastAndroid.SHORT);
                 } else {
                     console.log('Dữ liệu phản hồi không hợp lệ.');
@@ -102,15 +101,26 @@ function onLogin(){
         <View style= {styles.body}>
           <Text style={styles.dangnhap} >Đăng nhập</Text>  
         </View>
-        <View style={styles.viewof_text_input}>
-          <TextInput variant="outlined" label="Tài khoản hoặc Email" style={{color:'black'}} onChangeText={setEmail} />
-          <Text>{validataEmail}</Text>
-        </View>
-        <View style={styles.viewof_text_input}>
-          <TextInput variant="outlined" secureTextEntry label="Mật khẩu" style={{color:'black' }} onChangeText={setPassword} />
-          <Text>{validataPass}</Text>
-        </View>
+       
 
+        <View style={styles.viewof_text_input}>
+          <TextInput
+            placeholder="Username"
+            style={{ color: "black" }}
+            onChangeText={setEmail}
+          />
+          
+        </View>
+        <Text style={{marginHorizontal:16}}>{validataEmail}</Text>
+        <View style={styles.viewof_text_input}>
+          <TextInput
+            placeholder="Password"
+            style={{ color: "black" }}
+            onChangeText={setPassword}
+          />
+          
+        </View>
+        <Text style={{marginHorizontal:16}}>{validataPass}</Text>
         <TouchableOpacity
           style={styles.btnLogin}
           onPress={onLogin}
@@ -199,7 +209,12 @@ const styles = StyleSheet.create({
     flexDirection:'row',
   },
   viewof_text_input:{
-    marginHorizontal:16,
-    marginTop:10,
+    marginHorizontal: 16,
+    justifyContent: "center",
+    paddingHorizontal:20,
+    borderWidth:1,
+    height:50,
+    borderRadius:10,
+    marginTop: 10,
   }
 })
