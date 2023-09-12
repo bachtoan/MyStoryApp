@@ -1,12 +1,12 @@
 import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, StyleSheet,TextInput, Text, ToastAndroid, TouchableOpacity, TouchableOpacityBase, View } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './Host';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../reducers/AuthReducer';
-import {saveData} from '../async_storage/MyStorage';
+import {getData, saveData} from '../async_storage/MyStorage';
 
 
 export default function  LoginScreen() {
@@ -75,6 +75,18 @@ export default function  LoginScreen() {
             ToastAndroid.show('Đăng nhập thất bại.', ToastAndroid.SHORT);
         })
 }
+
+
+  getData('user').then((user) => {
+    if (user) {
+      console.log("Login: "+  user);
+    } else {
+      console.log("Login: Dữ liệu trống");
+    }
+  },[]);
+ 
+ 
+
 
 function onLogin(){
   setValidataEmail('');

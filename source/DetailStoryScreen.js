@@ -1,7 +1,7 @@
 import {
   Button,
   Dimensions,
-  Image,
+  
   ImageBackground,
   ScrollView,
   StyleSheet,
@@ -16,8 +16,21 @@ import { API_URL } from "./Host";
 import DemoCanvas from "./DemoCanvas";
 import ConfigTouchable from "./ConfigTouchable";
 import { useNavigation } from "@react-navigation/native";
+import { Canvas, Image, useFont, useImage, useTouchHandler, useValue } from "@shopify/react-native-skia";
+import { Text as CanvasText } from "@shopify/react-native-skia";
+
 
 export default function DetailStoryScreen({ route }) {
+  const image = useImage(
+    "https://firebasestorage.googleapis.com/v0/b/mystory-511b4.appspot.com/o/j2FtITkWXWvEA2eeiolqNH1672904703836_trong.png?alt=media&token=c62b971d-4199-46b5-9bb0-0d0b57788428"
+  );
+  const cx = useValue(100);
+  const cy = useValue(100);
+  const [isTouch, setisTouch] = useState(false);
+  const font = useFont(require("../assets/font/Roboto-Black.ttf"), 20);
+  let timeoutIdForSync = null;
+  let timeoutIdForTouch = null;
+
   const { id, name } = route.params;
   const [data, setdata] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
@@ -27,10 +40,6 @@ export default function DetailStoryScreen({ route }) {
   const [textPositionY, setOnTextPositionY] = useState();
   const [timeoutId, setTimeoutId] = useState(null);
   const [onTouch, setOnTouch] = useState(false);
-  
-  
-
-  
 
   useEffect(() => {
     DetailStory(id);
@@ -74,11 +83,62 @@ export default function DetailStoryScreen({ route }) {
     }
   };
 
+  const touchHandler = useTouchHandler({
+    onActive: ({ x, y }) => {
+      cx.current = x;
+      cy.current = y;
+      if (
+        cx.current >= 380 &&
+        cx.current <= 480 &&
+        cy.current >= 250 &&
+        cy.current <= 350
+      ) {
+        // handleButtonClick("lettuce.");
+        console.log("Active:" + cx.current + "-" +  cy.current);
+
+        setisTouch(false);
+        setisTouch(true);
+        if (timeoutIdForTouch) {
+          clearTimeout(timeoutIdForTouch);
+        }
+        
+        timeoutIdForTouch = setTimeout(() => {
+          setisTouch(false);
+          timeoutIdForTouch = null; 
+        }, 2000);  
+      }
+    },
+  });
+
   return (
-    <ScrollView>
+    
       <View style={{ flex: 1, position: "relative" }}>
         {isDataLoaded && (
-          <View>
+          <View style={{ flex: 1}}>
+          <Canvas style={{flex:1 }} onTouch={touchHandler} >
+            <Image
+              image={image}
+              fit="fill"
+              width={width}
+              height={height}
+            />
+            
+            {isTouch && (
+              <CanvasText
+                x={cx.current - 30}
+                y={cy.current - 30}
+                text="lettuce"
+                font={font}
+                color="black"
+              >         
+              </CanvasText>
+            )}       
+          </Canvas>
+
+
+
+
+
             {/* <Text>{"Trang số: "  + data.pages[currentPage].page_number}</Text>
               <Text>{"Background: "  + data.pages[currentPage].background}</Text>
 
@@ -100,43 +160,16 @@ export default function DetailStoryScreen({ route }) {
               ))}
               <Button title="Trang trước" onPress={PreviousPage} />
               <Button title="Trang sau" onPress={NextPage}  /> */}
+            
 
-            <ImageBackground
-              resizeMode="cover"
-              style={{ width: width, height: height }}
-              source={{
-                uri: data.pages[currentPage].background,
-              }}
-            />
-            {data.pages[currentPage].contents.map((content) => (
-                <View key={content.id}
-                  style={{
-                    position: 'absolute',
-                    left: Number(content.pivot.positionX),
-                    top: Number(content.pivot.positionY),
-                     
-                  }}
-                >
-                  <Text>{"Contents: " + content.content}</Text>                  
-                </View>
-            ))}
-           
-
-            {data.pages[currentPage].touchables.map((touchable) => (
+            {/* {data.pages[currentPage].touchables.map((touchable) => (
               <View style={{ position: "absolute" }} key={touchable.id}>
-                <ConfigTouchable
-                  positionX={touchable.pivot.positionX}
-                  positionY={touchable.pivot.positionY}
-                  touchWidth={touchable.pivot.touchWidth}
-                  touchHeight={touchable.pivot.touchHeight}
-                  data={touchable.data}
-                ></ConfigTouchable>
+                
               </View>
-            ))}
+            ))} */}
           </View>
         )}
       </View>
-    </ScrollView>
   );
 }
 

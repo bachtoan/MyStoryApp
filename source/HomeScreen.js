@@ -14,16 +14,16 @@ const HomeScreen = ({navigation}) => {
       getStorys();
         getData('user').then((user) => {
             if (user) {
-                console.log('Dữ liệu người dùng:', user);
+                console.log('Home: Dữ liệu người dùng:', user);
             } else {
-                console.log('Không tìm thấy dữ liệu người dùng.');
+                console.log('Home: Không tìm thấy dữ liệu người dùng.');
             }
         });
         getData('access_token').then((access_token) => {
           if (access_token) {
-              console.log('Dữ liệu người dùng:', access_token);
+              console.log('Home: Dữ liệu người dùng:', access_token);
           } else {
-              console.log('Không tìm thấy dữ liệu người dùng.');
+              console.log('Home: Không tìm thấy dữ liệu người dùng.');
           }
       });
     

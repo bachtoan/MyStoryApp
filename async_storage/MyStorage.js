@@ -13,16 +13,15 @@ export const getData = async (key) => {
     try {
         const value = await AsyncStorage.getItem(key);
         if (value !== null) {
-            // Dữ liệu đã tồn tại, giải mã JSON (nếu cần)
             const parsedValue = JSON.parse(value);
             return parsedValue;
         } else {
             // Không có dữ liệu với key này
-            console.log('Không tìm thấy dữ liệu cho key:', key);
+            console.log('AsyncStorage: Không tìm thấy dữ liệu cho key:', key);
             return null;
         }
     } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu:', error);
+        console.error('AsyncStorage: Lỗi khi lấy dữ liệu:', error);
         return null;
     }
 };

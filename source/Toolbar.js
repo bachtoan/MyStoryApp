@@ -44,6 +44,7 @@ const Toolbar = ({ title, filter }) => {
   };
   const onBackPressed = (e) => {
     console.log("onBackPressed");
+    navigation.goBack();
   };
   function LogoutDialogHandler() {
     setModalVisible(true);
@@ -69,7 +70,7 @@ const Toolbar = ({ title, filter }) => {
             });
             console.log(response);
             if (response.status === 200) {
-                await AsyncStorage.clear();
+                AsyncStorage.clear();
                 navigation.replace('Splash')
                 console.log('Đăng xuất thành công.');
             } else {
