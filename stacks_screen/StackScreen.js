@@ -21,7 +21,7 @@ const Stack = createNativeStackNavigator();
 const StackScreen = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='CanvasSkia'>
+      <Stack.Navigator initialRouteName='Splash'>
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Splash" component={SplashScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="SignUp" component={SignUpScreen} />
@@ -32,7 +32,6 @@ const StackScreen = () => {
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CoverStory" component={CoverStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CanvasSkia" component={DemoSkiaCanvas}/>
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CanvasSkiaPath" component={DemoSkiaCanvasPath}/>
-
         <Stack.Screen options={{ headerShown: false, orientation:"landscape"}} name="Canvas" component={DemoCanvas} />
       </Stack.Navigator>
     </NavigationContainer>
