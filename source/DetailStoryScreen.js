@@ -41,7 +41,7 @@ export default function DetailStoryScreen({ route }) {
   let timeoutIdForTouch = null;
 
   const { id, name } = route.params;
-  const [data, setdata] = useState({});
+  const [data, setData] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const { width, height } = Dimensions.get("window");
@@ -55,6 +55,7 @@ export default function DetailStoryScreen({ route }) {
   const [word, setWord] = useState([]);
   const [syncData, setSyncData] = useState([]);
   const [touchables, setTouchables] = useState([]);
+  const [something, setSomething] = useState('a');
 
 // const touchables = [
 //     {
@@ -165,8 +166,6 @@ const sync_data= [
   }
 ];
 
-  
-
   const DetailStory = async (id) => {
     try {
       const response = await fetch(API_URL + "detailstory", {
@@ -181,10 +180,13 @@ const sync_data= [
       });
       const json = await response.json();
       if (response.status === 201) {
-        
-        setdata(json.data);
+        setData(json.data);
         setTouchables(json.data.pages[0].touchables);
-        console.log('Data: '+json.data.pages[0].touchables);
+        
+        // console.log("DetailStory",json.data);
+        // console.log("DetailStory",json.data.pages[0].touchables);
+
+        // // console.log('Data: '+json.data.pages[0].touchables);
         setIsDataLoaded(true);
         ToastAndroid.show("Đã tìm thấy", ToastAndroid.SHORT);
       }
@@ -192,9 +194,12 @@ const sync_data= [
       console.log(error);
     }
   };
-  // useEffect(() => {
-  //   DetailStory(id);
-  // }, []);
+ 
+
+  useEffect(() => { 
+    DetailStory(id); 
+  }, []);
+
   const PreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
@@ -213,7 +218,7 @@ const sync_data= [
   async function playSound(DATA) {    
     const { sound } = await Audio.Sound.createAsync( 
       DATA
-    );
+    ); 
     setSound(sound);
 
     // console.log('Playing Sound');
@@ -221,7 +226,6 @@ const sync_data= [
   }
 
   useEffect(() => {
-    DetailStory(id);
     playSound(DATA_REQUIRE.I_will_shred_some_lettuce);
     sync_data.forEach((wordObj) => {
       const word = wordObj.w;
@@ -266,8 +270,8 @@ const sync_data= [
   }, [coloredWords]);
 
   function checkTouch(x, y) {
-    console.log(touchables);
-    console.log(data); 
+    console.log(touchables); 
+    console.log(data);  
 
     let resouce = [false, "", ""];
     for (const touchable of touchables) {
@@ -334,7 +338,8 @@ const sync_data= [
         }
       
     },
-  });
+    
+  },[data,touchables]);
 
   return (
     
@@ -371,10 +376,7 @@ const sync_data= [
                 justifyContent:'center',
               }}>
               {textElements}
-              
-
-        </View>
-        
+        </View>        
     </View>
 
 
