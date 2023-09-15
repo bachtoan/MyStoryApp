@@ -27,13 +27,13 @@ export default function DemoCanvas() {
       const ctx = canvas.getContext("2d");
       canvas.width = width;
       canvas.height = height;
-      console.log(canvas);
+      
 
       const image = new CanvasImage(canvas);
       image.src =
-        "https://firebasestorage.googleapis.com/v0/b/mystory-511b4.appspot.com/o/j2FtITkWXWvEA2eeiolqNH1672904703836_trong.png?alt=media&token=c62b971d-4199-46b5-9bb0-0d0b57788428";
+        "https://firebasestorage.googleapis.com/v0/b/mystory-511b4.appspot.com/o/Lg4oU6Aq4DxsWdwLByyCax1672904703767_trong.png?alt=media&token=8d9d34f6-8280-47e3-858c-9816ed94c1bf";
 
-      image.addEventListener("load", () => {
+      image.addEventListener("load", () => { 
         ctx.drawImage(image, 0, 0, width, height);
         ctx.fillStyle = "white";
         ctx.font = "30px Arial";
@@ -105,13 +105,13 @@ export default function DemoCanvas() {
       <View
         style={{
           position: "absolute",
-          width: 100,
-          height: 200,
-          left: 450,
-          top: 80,
+          width: 70,
+          height: 30,
+          left: 420,
+          top: 160,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "red",
+          backgroundColor: 'rgba(255, 0, 0, 0.5)',
         }}
       >
         <TouchableOpacity style={{}} onPress={TouchHandle}></TouchableOpacity>

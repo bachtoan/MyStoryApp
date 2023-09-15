@@ -50,6 +50,7 @@ const Toolbar = ({ title, filter }) => {
     setModalVisible(true);
   }
   async function LogoutHandle(){
+    AsyncStorage.clear();
 
     try {
         const token = await AsyncStorage.getItem('access_token');
@@ -70,7 +71,7 @@ const Toolbar = ({ title, filter }) => {
             });
             console.log(response);
             if (response.status === 200) {
-                AsyncStorage.clear();
+                // AsyncStorage.clear();
                 navigation.replace('Splash')
                 console.log('Đăng xuất thành công.');
             } else {
