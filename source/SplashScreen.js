@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import AnimatedLoader from "react-native-animated-loader";
 import { getData } from '../async_storage/MyStorage';
 
 export default function SplashScreen() {

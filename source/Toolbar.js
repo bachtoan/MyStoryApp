@@ -246,7 +246,6 @@ export default Toolbar;
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
-    marginBottom: 10,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

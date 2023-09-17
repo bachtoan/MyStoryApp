@@ -14,6 +14,7 @@ import SplashScreen from '../source/SplashScreen';
 import LoginScreen from '../source/LoginScreen';
 import SignUpScreen from '../source/SignUpScreen';
 import DemoSkiaCanvasPath from '../source/DemoSkiaCanvasPath';
+import PreviewStoryScreen from '../source/PreviewStoryScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -26,6 +27,7 @@ const StackScreen = () => {
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="SignUp" component={SignUpScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Home" component={HomeScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Preview" component={PreviewStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="List" component={ListStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Audio" component={AudioListScreen}/>
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="DetailStory" component={DetailStoryScreen} />
