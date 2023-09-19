@@ -15,6 +15,7 @@ import LoginScreen from '../source/LoginScreen';
 import SignUpScreen from '../source/SignUpScreen';
 import DemoSkiaCanvasPath from '../source/DemoSkiaCanvasPath';
 import PreviewStoryScreen from '../source/PreviewStoryScreen';
+import DemoLatTrang from '../source/DemoLatTrang';
 
 
 const Stack = createNativeStackNavigator();
@@ -22,7 +23,7 @@ const Stack = createNativeStackNavigator();
 const StackScreen = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Splash'>
+      <Stack.Navigator initialRouteName='Canvas'>
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Splash" component={SplashScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="SignUp" component={SignUpScreen} />
@@ -35,6 +36,8 @@ const StackScreen = () => {
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CanvasSkia" component={DemoSkiaCanvas}/>
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CanvasSkiaPath" component={DemoSkiaCanvasPath}/>
         <Stack.Screen options={{ headerShown: false, orientation:"landscape"}} name="Canvas" component={DemoCanvas} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape"}} name="Lattrang" component={DemoLatTrang} />
+
       </Stack.Navigator>
     </NavigationContainer>
     

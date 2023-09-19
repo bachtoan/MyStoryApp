@@ -90,7 +90,7 @@ export default function DetailStoryScreen({ route }) {
           }
         });
     }
-  }, [contentSound, syncData,refreshKey]);
+  }, [contentSound, syncData, refreshKey]);
 
   //render text khi logic sync text chạy, render theo mảng coloredWords
   useEffect(() => {
@@ -129,17 +129,15 @@ export default function DetailStoryScreen({ route }) {
     image
   );
 
-    // console.log(currentPage);
+  // console.log(currentPage);
   const PreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage((prevCurrentPage) => {
         const newCurrentPage = prevCurrentPage - 1;
-  
-       
         setTouchables(data.pages[newCurrentPage].touchables);
         setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
         setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
-        setImage(data.pages[newCurrentPage].background);  
+        setImage(data.pages[newCurrentPage].background);
         return newCurrentPage;
       });
     } else {
@@ -150,7 +148,7 @@ export default function DetailStoryScreen({ route }) {
     if (currentPage < data.pages.length - 1) {
       setCurrentPage((prevCurrentPage) => {
         const newCurrentPage = prevCurrentPage + 1;
-        
+
         setTouchables(data.pages[newCurrentPage].touchables);
         setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
         setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
@@ -162,14 +160,14 @@ export default function DetailStoryScreen({ route }) {
     }
   };
 
-  const handleRefresh = () => {
+  const HandleRefresh = () => {
     console.log(refreshKey);
-   
+
 
     setTimeout(() => {
       setRefreshKey(!refreshKey);
     }, 500);
-   
+
   };
 
   async function playSound(DATA) {
@@ -186,7 +184,7 @@ export default function DetailStoryScreen({ route }) {
 
 
   function checkTouch(x, y) {
-  
+
     let resouce = [false, "", ""];
     for (const touchable of touchables) {
       const { pivot } = touchable;
@@ -214,16 +212,6 @@ export default function DetailStoryScreen({ route }) {
     setColoredWords([]);
     setWord(word);
     setColoredWords((prevWords) => [...prevWords, word]);
-    
-    setisTouch(true);
-        
-          clearTimeout(timeoutIdForTouch);
-     
-        timeoutIdForTouch = setTimeout(() => {
-          setisTouch(false);
-          timeoutIdForTouch = null;
-        }, 2000);
-
     if (DATA_REQUIRE[soundName]) {
       playSound(soundName)
     }
@@ -243,39 +231,43 @@ export default function DetailStoryScreen({ route }) {
     onStart: ({ x, y }) => {
       setOnStartX(x);
       setOnStartY(y);
+      clearTimeout(timeoutIdForTouch);
+
       const resouce = checkTouch(x, y);
       if (
         resouce[0]
       ) {
         cx.current = x;
         cy.current = y;
-        setisTouch(false);
-        
         handleButtonClick(resouce[1], resouce[2]);
-
+        setisTouch(true);
       }
-
-    },   
+    },
     onEnd: ({ x, y }) => {
       const distanceX = onStartX - x;
       const distanceY = onStartY - y;
-      
-      if(onStartX > 700 && distanceX > 120){
-          NextPage();
-          return
-      }
-      if(onStartX < 150 && distanceX < -120){
-          PreviousPage();
-          return
-      }
-      if(distanceY < -120){
-        handleRefresh();
-        return
-      }    
-    },
-  
 
-  }, [data, touchables, onStartX, onStartY, currentPage]);
+      if (onStartX > 700 && distanceX > 120) {
+        NextPage();
+        return
+      }
+      if (onStartX < 150 && distanceX < -120) {
+        PreviousPage();
+        return
+      }
+      if (distanceY < -120) {
+        HandleRefresh();
+        return
+      }
+      timeoutIdForTouch = setTimeout(() => {
+        setisTouch(false);
+        console.log("time out");
+        timeoutIdForTouch = null;
+      }, 2000);
+    },
+
+
+  }, [data, touchables, onStartX, onStartY, currentPage,timeoutIdForTouch,isTouch]);
 
   return (
 

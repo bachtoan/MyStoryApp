@@ -16,8 +16,10 @@ export default function PreviewStoryScreen({ route, navigation }) {
     await fetch(API_URL + "detailstory/" + id)
       .then((res) => res.json())
       .then((res) => {
-        setData(res.data)
-        setIsDataLoaded(true);
+        setData(res.data)     
+        if(res.data.pages.length > 0){
+          setIsDataLoaded(true);
+        }
       })
       .catch((error) => {
         console.error(error);

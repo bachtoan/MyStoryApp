@@ -31,11 +31,11 @@ export default function DemoCanvas() {
 
       const image = new CanvasImage(canvas);
       image.src =
-        "https://firebasestorage.googleapis.com/v0/b/mystory-511b4.appspot.com/o/Lg4oU6Aq4DxsWdwLByyCax1672904703767_trong.png?alt=media&token=8d9d34f6-8280-47e3-858c-9816ed94c1bf";
+        "https://firebasestorage.googleapis.com/v0/b/mystory-511b4.appspot.com/o/sK2dF8gy6Ou6nAWXbfmQgL1672904703791_trong.png?alt=media&token=ad6e0e3e-d1bc-4daf-ab86-bfc8ce47aecb";
 
       image.addEventListener("load", () => { 
         ctx.drawImage(image, 0, 0, width, height);
-        ctx.fillStyle = "white";
+        ctx.fillStyle = "white"; 
         ctx.font = "30px Arial";
         ctx.fillText("Hello, asdadadnn!", 50, 50);
       });
@@ -105,10 +105,12 @@ export default function DemoCanvas() {
       <View
         style={{
           position: "absolute",
-          width: 70,
-          height: 30,
-          left: 420,
-          top: 160,
+          width: 90,
+          height: 25,
+          //x
+          left:430,
+          //y
+          top: 270,
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: 'rgba(255, 0, 0, 0.5)',
