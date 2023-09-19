@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View, Button, Touchable, TouchableOpacity, FlatList, Image, ImageBackground, SafeAreaView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Toolbar from './Toolbar';
 import { text } from '@fortawesome/fontawesome-svg-core';
 import { API_URL } from './Host';
 import { getData } from '../async_storage/MyStorage';
+import * as Animatable from 'react-native-animatable';
+
 
 const HomeScreen = ({ navigation }) => {
+  const imageRef = useRef(null);
   const [data, setData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
@@ -69,6 +72,11 @@ const HomeScreen = ({ navigation }) => {
         </View>
         {isDataLoaded && (
           <View>
+            <Animatable.View
+            ref={imageRef}
+            animation="slideInUp"
+            duration={1000}
+          >
             <FlatList style={{ paddingStart: 10, marginBottom: 100 }}
               data={data}
               numColumns={5}
@@ -88,6 +96,7 @@ const HomeScreen = ({ navigation }) => {
               vertical
 
             />
+            </Animatable.View>
           </View>
         )}
 

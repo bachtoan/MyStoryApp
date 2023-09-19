@@ -132,6 +132,7 @@ export default function DetailStoryScreen({ route }) {
   // console.log(currentPage);
   const PreviousPage = () => {
     if (currentPage > 0) {
+      setisTouch(false);
       setCurrentPage((prevCurrentPage) => {
         const newCurrentPage = prevCurrentPage - 1;
         setTouchables(data.pages[newCurrentPage].touchables);
@@ -146,6 +147,7 @@ export default function DetailStoryScreen({ route }) {
   };
   const NextPage = () => {
     if (currentPage < data.pages.length - 1) {
+      setisTouch(false);
       setCurrentPage((prevCurrentPage) => {
         const newCurrentPage = prevCurrentPage + 1;
 

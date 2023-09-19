@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator();
 const StackScreen = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Canvas'>
+      <Stack.Navigator initialRouteName='Splash'>
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Splash" component={SplashScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="SignUp" component={SignUpScreen} />
