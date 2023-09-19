@@ -34,7 +34,7 @@ export default function DetailStoryScreen({ route }) {
   const { width, height } = Dimensions.get("window");
   const font = useFont(require("../assets/font/Roboto-Black.ttf"), 20);
   let timeoutIdForSync = null;
-  let timeoutIdForTouch = null;
+  let timeoutIdForTouch;
 
   const [onStartX, setOnStartX] = useState();
   const [onStartY, setOnStartY] = useState();
@@ -53,6 +53,7 @@ export default function DetailStoryScreen({ route }) {
   const [word, setWord] = useState([]);
   const [syncData, setSyncData] = useState([]);
   const [touchables, setTouchables] = useState([]);
+  const [isSoundPlay, setIsSoundPlaying] = useState(false);
 
   useEffect(() => {
     setTouchables(data.pages[currentPage].touchables);
@@ -117,13 +118,30 @@ export default function DetailStoryScreen({ route }) {
   }, [coloredWords, syncData, refreshKey]);
 
   useEffect(() => {
-    return sound
-      ? () => {
+    let soundUnloadHandler;
+  
+    if (sound) {
+      soundUnloadHandler = () => {
         // console.log('Unloading Sound');
         sound.unloadAsync();
+      };
+  
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          setIsSoundPlaying(false);
+        }
+      });
+    }
+  
+    return () => {
+      if (soundUnloadHandler) {
+        soundUnloadHandler();
       }
-      : undefined;
+    };
   }, [sound]);
+  
+  
+  
 
   const imageX = useImage(
     image
@@ -131,39 +149,48 @@ export default function DetailStoryScreen({ route }) {
 
   // console.log(currentPage);
   const PreviousPage = () => {
-    if (currentPage > 0) {
-      setisTouch(false);
+    setisTouch(false);
+    if(isSoundPlay){
+      return;
+    }else{
+      if (currentPage > 0) {
       setCurrentPage((prevCurrentPage) => {
         const newCurrentPage = prevCurrentPage - 1;
+        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
         setTouchables(data.pages[newCurrentPage].touchables);
         setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
-        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
         setImage(data.pages[newCurrentPage].background);
         return newCurrentPage;
       });
-    } else {
-      ToastAndroid.show("Đây là trang đầu tiên rồi", ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show("Đây là trang đầu tiên rồi", ToastAndroid.SHORT);
+      }
     }
+    
   };
   const NextPage = () => {
+    setisTouch(false);
+    if(isSoundPlay){
+      return;
+    }else{
     if (currentPage < data.pages.length - 1) {
-      setisTouch(false);
       setCurrentPage((prevCurrentPage) => {
         const newCurrentPage = prevCurrentPage + 1;
-
+        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
         setTouchables(data.pages[newCurrentPage].touchables);
         setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
-        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
         setImage(data.pages[newCurrentPage].background);
         return newCurrentPage;
       });
     } else {
       ToastAndroid.show("Đây là trang cuối rồi", ToastAndroid.SHORT);
     }
+    }
+    
   };
 
   const HandleRefresh = () => {
-    console.log(refreshKey);
+    // console.log(refreshKey);
 
 
     setTimeout(() => {
@@ -176,36 +203,44 @@ export default function DetailStoryScreen({ route }) {
     try {
       const { sound } = await Audio.Sound.createAsync(DATA_REQUIRE[DATA]);
       setSound(sound);
+      setIsSoundPlaying(true);
       await sound.playAsync();
       return true;
     } catch (error) {
       console.error('Lỗi khi chạy âm thanh:', error);
       return false;
-    }
+    } 
   }
 
 
   function checkTouch(x, y) {
-
+    const screenWidth = 836.1904761904761;
+    const screenHeight = 411.42857142857144;
+    const xScale = width / screenWidth;
+    const yScale = height / screenHeight;
+    
     let resouce = [false, "", ""];
     for (const touchable of touchables) {
       const { pivot } = touchable;
       const { sound } = touchable;
-
       const positionX = parseInt(pivot.positionX, 10);
       const positionY = parseInt(pivot.positionY, 10);
       const touchWidth = parseInt(pivot.touchWidth, 10);
       const touchHeight = parseInt(pivot.touchHeight, 10);
 
-      if (
-        x >= positionX &&
-        x <= positionX + touchWidth &&
-        y >= positionY &&
-        y <= positionY + touchHeight
-      ) {
+      const scaledPositionX = positionX * xScale;
+      const scaledPositionY = positionY * yScale;
+      const scaledTouchWidth = touchWidth * xScale;
+      const scaledTouchHeight = touchHeight * yScale;
 
+      if (
+        x >= scaledPositionX &&
+        x <= scaledPositionX + scaledTouchWidth &&
+        y >= scaledPositionY &&
+        y <= scaledPositionY + scaledTouchHeight
+      ) {
         resouce = [true, touchable.data, sound.soundName];
-      }
+}
     }
     return resouce;
   }
@@ -233,7 +268,6 @@ export default function DetailStoryScreen({ route }) {
     onStart: ({ x, y }) => {
       setOnStartX(x);
       setOnStartY(y);
-      clearTimeout(timeoutIdForTouch);
 
       const resouce = checkTouch(x, y);
       if (
@@ -242,10 +276,21 @@ export default function DetailStoryScreen({ route }) {
         cx.current = x;
         cy.current = y;
         handleButtonClick(resouce[1], resouce[2]);
+        console.log(timeoutIdForTouch);
+        if(timeoutIdForTouch){
+          clearTimeout(timeoutIdForTouch);
+        }
         setisTouch(true);
       }
     },
     onEnd: ({ x, y }) => {
+      timeoutIdForTouch = setTimeout(() => {
+        setisTouch(false);
+        console.log("time out");
+        timeoutIdForTouch = null;
+      }, 2000);
+      console.log(timeoutIdForTouch);
+
       const distanceX = onStartX - x;
       const distanceY = onStartY - y;
 
@@ -261,15 +306,11 @@ export default function DetailStoryScreen({ route }) {
         HandleRefresh();
         return
       }
-      timeoutIdForTouch = setTimeout(() => {
-        setisTouch(false);
-        console.log("time out");
-        timeoutIdForTouch = null;
-      }, 2000);
+      
     },
 
 
-  }, [data, touchables, onStartX, onStartY, currentPage,timeoutIdForTouch,isTouch]);
+  }, [data, touchables,sound, onStartX, onStartY, currentPage,isTouch, isSoundPlay]);
 
   return (
 
