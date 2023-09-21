@@ -10,10 +10,10 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Toolbar from "./Toolbar";
-import { API_URL } from "./Host";
-import DemoCanvas from "./DemoCanvas";
-import ConfigTouchable from "./ConfigTouchable";
+import Toolbar from "../my_component/Toolbar";
+import { API_URL } from "../my_component/Host";
+import DemoCanvas from "../my_component/DemoCanvas";
+import ConfigTouchable from "../my_component/ConfigTouchable";
 import { useNavigation } from "@react-navigation/native";
 import {
   Canvas,
@@ -55,13 +55,70 @@ export default function DetailStoryScreen({ route }) {
   const [touchables, setTouchables] = useState([]);
   const [isSoundPlay, setIsSoundPlaying] = useState(false);
 
+  const imageX = useImage(
+    image2
+  );
+
+  
+  const PreviousPage = () => {
+    setisTouch(false);
+    if(isSoundPlay){
+      return;
+    }else{
+      if (currentPage > 0) {
+        setColoredWords([]);
+        setCurrentPage((prevCurrentPage) => {
+        const newCurrentPage = prevCurrentPage - 1;
+        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
+        setTouchables(data.pages[newCurrentPage].touchables);
+        setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
+        setImage2(IMAGE_REQUIRE[data.pages[newCurrentPage].backgroundName]);
+        return newCurrentPage;
+      });
+      } else {
+        ToastAndroid.show("Đây là trang đầu tiên rồi", ToastAndroid.SHORT);
+      }
+    }
+    
+  };
+  const NextPage = () => {
+    setisTouch(false);
+    if(isSoundPlay){
+      return;
+    }else{
+    if (currentPage < data.pages.length - 1) {
+      setColoredWords([]);
+      setCurrentPage((prevCurrentPage) => {
+        const newCurrentPage = prevCurrentPage + 1;
+        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
+        setTouchables(data.pages[newCurrentPage].touchables);
+        setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
+        setImage2(IMAGE_REQUIRE[data.pages[newCurrentPage].backgroundName]);
+        return newCurrentPage;
+      });
+    } else {
+      ToastAndroid.show("Đây là trang cuối rồi", ToastAndroid.SHORT);
+    }
+    }
+    
+  };
+
+  const HandleRefresh = () => {
+    // console.log(refreshKey);
+    setColoredWords([])
+
+    setTimeout(() => {
+      setRefreshKey(!refreshKey);
+    }, 500);
+
+  };
+
   useEffect(() => {
     setTouchables(data.pages[currentPage].touchables);
     setSyncData(data.pages[currentPage].contents[0].sync_data);
     setContentSound(data.pages[currentPage].contents[0].sound.soundName);
     let imageData = data.pages[currentPage].backgroundName;
     let image = IMAGE_REQUIRE[imageData]
-    console.log(image);
     setImage2(image);
     setIsDataLoaded(true)
   }, []);
@@ -69,7 +126,7 @@ export default function DetailStoryScreen({ route }) {
   useEffect(() => {
     setIsImageLoaded(true);
     // console.log(isDataLoaded);
-  }, [image]);
+  }, [image2]);
 
   //logic để thêm từ cần sync text vào mảng
   useEffect(() => {
@@ -145,71 +202,7 @@ export default function DetailStoryScreen({ route }) {
   
   
 
-  const imageX = useImage(
-    image2
-  );
-
-  // console.log(currentPage);
-  const PreviousPage = () => {
-    setisTouch(false);
-    if(isSoundPlay){
-      return;
-    }else{
-      if (currentPage > 0) {
-        setColoredWords([]);
-        setCurrentPage((prevCurrentPage) => {
-        const newCurrentPage = prevCurrentPage - 1;
-        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
-        setTouchables(data.pages[newCurrentPage].touchables);
-        setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
-        let imageData = data.pages[newCurrentPage].backgroundName;
-        let image = IMAGE_REQUIRE[imageData]
-        // console.log(image);
-        setImage2(image);
-        // setImage(data.pages[newCurrentPage].background);
-        return newCurrentPage;
-      });
-      } else {
-        ToastAndroid.show("Đây là trang đầu tiên rồi", ToastAndroid.SHORT);
-      }
-    }
-    
-  };
-  const NextPage = () => {
-    setisTouch(false);
-    if(isSoundPlay){
-      return;
-    }else{
-    if (currentPage < data.pages.length - 1) {
-      setColoredWords([]);
-      setCurrentPage((prevCurrentPage) => {
-        const newCurrentPage = prevCurrentPage + 1;
-        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
-        setTouchables(data.pages[newCurrentPage].touchables);
-        setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
-        let imageData = data.pages[newCurrentPage].backgroundName;
-        let image = IMAGE_REQUIRE[imageData]
-        // console.log(image);
-        setImage2(image);
-        // setImage(data.pages[newCurrentPage].background);
-        return newCurrentPage;
-      });
-    } else {
-      ToastAndroid.show("Đây là trang cuối rồi", ToastAndroid.SHORT);
-    }
-    }
-    
-  };
-
-  const HandleRefresh = () => {
-    // console.log(refreshKey);
-
-
-    setTimeout(() => {
-      setRefreshKey(!refreshKey);
-    }, 500);
-
-  };
+  
 
   async function playSound(DATA) {
     try {
@@ -256,7 +249,7 @@ export default function DetailStoryScreen({ route }) {
     }
     return resouce;
   }
-  function handleButtonClick(word, soundName) {
+  function handleClick(word, soundName) {
 
     setColoredWords([]);
     setWord(word);
@@ -287,8 +280,8 @@ export default function DetailStoryScreen({ route }) {
       ) {
         cx.current = x;
         cy.current = y;
-        handleButtonClick(resouce[1], resouce[2]);
-        // console.log(timeoutIdForTouch);
+        handleClick(resouce[1], resouce[2]);
+        console.log(timeoutIdForTouch);
         if(timeoutIdForTouch){
           clearTimeout(timeoutIdForTouch);
         }
@@ -300,7 +293,7 @@ export default function DetailStoryScreen({ route }) {
         setisTouch(false);
         // console.log("time out");
         timeoutIdForTouch = null;
-      }, 2000);
+      }, 3000);
       // console.log(timeoutIdForTouch);
 
       const distanceX = onStartX - x;
@@ -322,7 +315,7 @@ export default function DetailStoryScreen({ route }) {
     },
 
 
-  }, [data, touchables,sound, onStartX, onStartY, currentPage,isTouch, isSoundPlay]);
+  }, [data, touchables,sound, onStartX, onStartY, currentPage,isTouch, isSoundPlay, image2]);
 
   return (
 

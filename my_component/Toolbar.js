@@ -49,6 +49,9 @@ const Toolbar = ({ title, filter }) => {
   function LogoutDialogHandler() {
     setModalVisible(true);
   }
+  function OpenSetting(){
+    navigation.navigate("Setting")
+  }
   async function LogoutHandle(){
     try {
         const token = await AsyncStorage.getItem('access_token');
@@ -231,7 +234,7 @@ const Toolbar = ({ title, filter }) => {
                 />
               </TouchableOpacity>
               <TouchableOpacity style={styles.dropmenuItem}
-                
+                onPress={OpenSetting}
               >
                 <FontAwesomeIcon icon={faGear} size={30} color="#7091F5" />
               </TouchableOpacity>
@@ -254,6 +257,7 @@ const styles = StyleSheet.create({
     position: "relative",
     padding: 10,
     backgroundColor: "transparent",
+    zIndex:100
   },
 
   dropmenubutton: {

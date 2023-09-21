@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, Button, Touchable, TouchableOpacity, FlatList, Image, ImageBackground, SafeAreaView } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import Toolbar from './Toolbar';
+import Toolbar from '../my_component/Toolbar';
 import { text } from '@fortawesome/fontawesome-svg-core';
-import { API_URL } from './Host';
+import { API_URL } from '../my_component/Host';
 import { getData } from '../async_storage/MyStorage';
 import * as Animatable from 'react-native-animatable';
 

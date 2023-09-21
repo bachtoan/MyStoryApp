@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import Toolbar from './Toolbar';
-import { API_URL } from './Host';
+import Toolbar from '../my_component/Toolbar';
+import { API_URL } from '../my_component/Host';
 
 export default function AudioListScreen() {
     let [data, setData] = useState([]);

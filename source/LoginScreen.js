@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useNavigation } from '@react-navigation/native';
-import { API_URL } from './Host';
+import { API_URL } from '../my_component/Host';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../reducers/AuthReducer';
 import {getData, saveData} from '../async_storage/MyStorage';

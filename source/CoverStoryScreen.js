@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Toolbar from './Toolbar'
+import Toolbar from '../my_component/Toolbar'
 
 export default function CoverStoryScreen() {
   return (

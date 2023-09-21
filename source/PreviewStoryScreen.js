@@ -1,10 +1,10 @@
 import { ActivityIndicator, Image, ImageBackground, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import Toolbar from './Toolbar'
+import Toolbar from '../my_component/Toolbar'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import * as Animatable from 'react-native-animatable';
-import { API_URL } from './Host';
+import { API_URL } from '../my_component/Host';
 
 export default function PreviewStoryScreen({ route, navigation }) {
   const imageRef = useRef(null);

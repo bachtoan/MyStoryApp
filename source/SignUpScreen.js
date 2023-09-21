@@ -18,7 +18,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useNavigation } from "@react-navigation/native";
 import { faEquals } from "@fortawesome/free-solid-svg-icons";
-import { API_URL } from "./Host";
+import { API_URL } from "../my_component/Host";
 import { useRef } from "react";
 
 
