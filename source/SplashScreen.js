@@ -15,7 +15,6 @@ export default function SplashScreen() {
   const navigation = new useNavigation();
 
   useEffect(() => {
-    
     setTimeout(() => {
       
       getData('user').then((user) => {

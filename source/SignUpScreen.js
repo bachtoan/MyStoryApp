@@ -19,6 +19,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useNavigation } from "@react-navigation/native";
 import { faEquals } from "@fortawesome/free-solid-svg-icons";
 import { API_URL } from "./Host";
+import { useRef } from "react";
 
 
 export default function LoginScreen() {
@@ -30,7 +31,7 @@ export default function LoginScreen() {
   const [validatePass,setValidatePass] = useState('');
   const [validateUser,setValidateUser] = useState('');
   const [validateEmail,setValidateEmail] = useState('');
-
+  const scrollViewRef = useRef(null);
 
 
   const navigation = useNavigation();
@@ -65,7 +66,7 @@ export default function LoginScreen() {
         })
     })
         .then((res) => {
-            if (res.status === 201) {
+            if (res.status === 200) {
               ToastAndroid.show('Đăng ký thành công', ToastAndroid.SHORT);
               setUsername('');
               setEmail('');
@@ -88,6 +89,8 @@ export default function LoginScreen() {
     setValidateEmail('');
     setValidatePass('');
     setValidateUser('');
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
     if(!username) {
         setValidateUser("Không được để trống")
         return
@@ -95,6 +98,11 @@ export default function LoginScreen() {
       if(!email) {
         setValidateEmail("Không được để trống Email")
         return
+      }
+      if (!emailRegex.test(email)) {
+        setValidateEmail("Email không hợp lệ")
+
+        return ;
       }
 
       if(!password || !rePassword) {
@@ -124,7 +132,7 @@ export default function LoginScreen() {
       onLayout={onLayoutRootView}
     >
     
-    <ScrollView>
+    <ScrollView style={{flexGrow:1}} ref={scrollViewRef}>
     <View style={styles.container}>
       
         <View style={styles.logoView}>
@@ -172,6 +180,10 @@ export default function LoginScreen() {
             secureTextEntry = {true}
             style={{ color: "black" }}
             onChangeText={setRePassword}
+            onFocus={() => {
+              scrollViewRef.current.scrollToEnd();
+            }}
+
           />
         </View>
         <Text style={styles.text_message}>{validatePass}</Text>
@@ -191,7 +203,6 @@ export default function LoginScreen() {
             </Text>
           </TouchableOpacity>
         </View>
-       
       </View>
       </ScrollView>
    

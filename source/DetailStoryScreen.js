@@ -26,6 +26,7 @@ import {
 } from "@shopify/react-native-skia";
 import { DATA_REQUIRE } from "../assets/SoundSoure";
 import { Audio } from 'expo-av';
+import { IMAGE_REQUIRE } from "../assets/ImageSource";
 
 export default function DetailStoryScreen({ route }) {
 
@@ -35,13 +36,12 @@ export default function DetailStoryScreen({ route }) {
   const font = useFont(require("../assets/font/Roboto-Black.ttf"), 20);
   let timeoutIdForSync = null;
   let timeoutIdForTouch;
-
   const [onStartX, setOnStartX] = useState();
   const [onStartY, setOnStartY] = useState();
-
   const [refreshKey, setRefreshKey] = useState(false);
   const [isTouch, setisTouch] = useState(false);
   const [image, setImage] = useState('');
+  const [image2, setImage2] = useState();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const { id, data } = route.params;
   const [currentPage, setCurrentPage] = useState(0);
@@ -59,7 +59,10 @@ export default function DetailStoryScreen({ route }) {
     setTouchables(data.pages[currentPage].touchables);
     setSyncData(data.pages[currentPage].contents[0].sync_data);
     setContentSound(data.pages[currentPage].contents[0].sound.soundName);
-    setImage(data.pages[currentPage].background);
+    let imageData = data.pages[currentPage].backgroundName;
+    let image = IMAGE_REQUIRE[imageData]
+    console.log(image);
+    setImage2(image);
     setIsDataLoaded(true)
   }, []);
 
@@ -141,10 +144,9 @@ export default function DetailStoryScreen({ route }) {
   }, [sound]);
   
   
-  
 
   const imageX = useImage(
-    image
+    image2
   );
 
   // console.log(currentPage);
@@ -154,12 +156,17 @@ export default function DetailStoryScreen({ route }) {
       return;
     }else{
       if (currentPage > 0) {
-      setCurrentPage((prevCurrentPage) => {
+        setColoredWords([]);
+        setCurrentPage((prevCurrentPage) => {
         const newCurrentPage = prevCurrentPage - 1;
         setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
         setTouchables(data.pages[newCurrentPage].touchables);
         setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
-        setImage(data.pages[newCurrentPage].background);
+        let imageData = data.pages[newCurrentPage].backgroundName;
+        let image = IMAGE_REQUIRE[imageData]
+        // console.log(image);
+        setImage2(image);
+        // setImage(data.pages[newCurrentPage].background);
         return newCurrentPage;
       });
       } else {
@@ -174,12 +181,17 @@ export default function DetailStoryScreen({ route }) {
       return;
     }else{
     if (currentPage < data.pages.length - 1) {
+      setColoredWords([]);
       setCurrentPage((prevCurrentPage) => {
         const newCurrentPage = prevCurrentPage + 1;
         setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
         setTouchables(data.pages[newCurrentPage].touchables);
         setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
-        setImage(data.pages[newCurrentPage].background);
+        let imageData = data.pages[newCurrentPage].backgroundName;
+        let image = IMAGE_REQUIRE[imageData]
+        // console.log(image);
+        setImage2(image);
+        // setImage(data.pages[newCurrentPage].background);
         return newCurrentPage;
       });
     } else {
@@ -276,7 +288,7 @@ export default function DetailStoryScreen({ route }) {
         cx.current = x;
         cy.current = y;
         handleButtonClick(resouce[1], resouce[2]);
-        console.log(timeoutIdForTouch);
+        // console.log(timeoutIdForTouch);
         if(timeoutIdForTouch){
           clearTimeout(timeoutIdForTouch);
         }
@@ -286,19 +298,19 @@ export default function DetailStoryScreen({ route }) {
     onEnd: ({ x, y }) => {
       timeoutIdForTouch = setTimeout(() => {
         setisTouch(false);
-        console.log("time out");
+        // console.log("time out");
         timeoutIdForTouch = null;
       }, 2000);
-      console.log(timeoutIdForTouch);
+      // console.log(timeoutIdForTouch);
 
       const distanceX = onStartX - x;
       const distanceY = onStartY - y;
 
-      if (onStartX > 700 && distanceX > 120) {
+      if (distanceX > 120) {
         NextPage();
         return
       }
-      if (onStartX < 150 && distanceX < -120) {
+      if (distanceX < -120) {
         PreviousPage();
         return
       }

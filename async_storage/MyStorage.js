@@ -4,7 +4,7 @@ export const saveData = async (key, value) => {
     try {
         await AsyncStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
-        console.error('Lỗi khi lưu dữ liệu:', error);
+        // console.error('Lỗi khi lưu dữ liệu:', error);
     }
 };
 
@@ -17,11 +17,11 @@ export const getData = async (key) => {
             return parsedValue;
         } else {
             // Không có dữ liệu với key này
-            console.log('AsyncStorage: Không tìm thấy dữ liệu cho key:', key);
+            // console.log('AsyncStorage: Không tìm thấy dữ liệu cho key:', key);
             return null;
         }
     } catch (error) {
-        console.error('AsyncStorage: Lỗi khi lấy dữ liệu:', error);
+        // console.error('AsyncStorage: Lỗi khi lấy dữ liệu:', error);
         return null;
     }
 };

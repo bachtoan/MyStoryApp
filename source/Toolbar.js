@@ -50,8 +50,6 @@ const Toolbar = ({ title, filter }) => {
     setModalVisible(true);
   }
   async function LogoutHandle(){
-    AsyncStorage.clear();
-
     try {
         const token = await AsyncStorage.getItem('access_token');
         console.log(token);
@@ -71,17 +69,21 @@ const Toolbar = ({ title, filter }) => {
             });
             console.log(response);
             if (response.status === 200) {
-                // AsyncStorage.clear();
+                AsyncStorage.clear();
                 navigation.replace('Splash')
                 console.log('Đăng xuất thành công.');
             } else {
+                AsyncStorage.clear();
+                navigation.replace('Splash')
                 console.log('Đăng xuất thất bại.');
             }
         } else {
             console.log('Token không tồn tại trong AsyncStorage.');
         }
     } catch (error) {
-        console.error('Lỗi khi đăng xuất:', error);
+        AsyncStorage.clear();
+        navigation.replace('Splash')
+        console.error('Lỗi khi đăng xuất', error);
     }
 }
   return (
@@ -199,7 +201,7 @@ const Toolbar = ({ title, filter }) => {
           </View>
         )}
 
-        <TouchableOpacity style={styles.buttonmenu} onPress={onBackPressed}>
+        <TouchableOpacity style={styles.buttonmenu} >
           <FontAwesomeIcon icon={faMagnifyingGlass} size={30} color="#7091F5" />
         </TouchableOpacity>
 

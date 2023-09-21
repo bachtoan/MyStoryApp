@@ -23,6 +23,7 @@ export const DATA_REQUIRE = {
     cheese_grater: require('../assets/sound/cheese_grater.mp3'),   
     cucumber: require('../assets/sound/cucumber.mp3'),  
     carrot: require('../assets/sound/carrot.mp3'),
+    tap: require('../assets/sound/tap.mp3'),
     pineapple: require('../assets/sound/pineapple.mp3'),
     apple: require('../assets/sound/apple.mp3'),
     Of_course_we_need_some_fruits_and_vegetables:  require('../assets/sound/Of_course_we_need_some_fruits_and_vegetables.mp3'),    

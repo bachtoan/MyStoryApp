@@ -18,7 +18,7 @@ const HomeScreen = ({ navigation }) => {
       .then((res) => {
         setData(res.story);
         setIsDataLoaded(true);
-        console.log(res.story); 
+        // console.log(res.story); 
       })
       .catch((error) => { 
         console.error("Home: "+ error);
@@ -76,6 +76,7 @@ const HomeScreen = ({ navigation }) => {
             ref={imageRef}
             animation="slideInUp"
             duration={1000}
+            style={{marginBottom: 100 }}
           >
             <FlatList style={{ paddingStart: 10, marginBottom: 100 }}
               data={data}
