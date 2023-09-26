@@ -1,23 +1,15 @@
 import {
-  Button,
   Dimensions,
-  ImageBackground,
-  ScrollView,
   StyleSheet,
-  Text,
   ToastAndroid,
-  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Toolbar from "../my_component/Toolbar";
-import { API_URL } from "../my_component/Host";
-import DemoCanvas from "../my_component/DemoCanvas";
-import ConfigTouchable from "../my_component/ConfigTouchable";
-import { useNavigation } from "@react-navigation/native";
+
 import {
   Canvas,
   Text as CanvasText,
+  Group,
   Image,
   useFont,
   useImage,
@@ -27,182 +19,105 @@ import {
 import { DATA_REQUIRE } from "../assets/SoundSoure";
 import { Audio } from 'expo-av';
 import { IMAGE_REQUIRE } from "../assets/ImageSource";
+import SyncText from "../my_component/SyncText";
 
 export default function DetailStoryScreen({ route }) {
-
+  const { id, data } = route.params; 
   const cx = useValue(100);
   const cy = useValue(100);
   const { width, height } = Dimensions.get("window");
-  const font = useFont(require("../assets/font/Roboto-Black.ttf"), 20);
-  let timeoutIdForSync = null;
+  const font = useFont(require("../assets/font/Mooli-Regular.ttf"), 30);
   let timeoutIdForTouch;
   const [onStartX, setOnStartX] = useState();
   const [onStartY, setOnStartY] = useState();
   const [refreshKey, setRefreshKey] = useState(false);
   const [isTouch, setisTouch] = useState(false);
-  const [image, setImage] = useState('');
-  const [image2, setImage2] = useState();
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const { id, data } = route.params;
+  const [onTouch, setOnTouch] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const [sound, setSound] = React.useState();
-  const [coloredWords, setColoredWords] = useState([]);
-  const [textElements, setTextElements] = useState([]);
+  const [sound, setSound] = useState();
   const [contentSound, setContentSound] = useState([]);
   const [word, setWord] = useState([]);
-  const [syncData, setSyncData] = useState([]);
-  const [touchables, setTouchables] = useState([]);
   const [isSoundPlay, setIsSoundPlaying] = useState(false);
 
   const imageX = useImage(
-    image2
+    IMAGE_REQUIRE[data.pages[currentPage].backgroundName]
   );
 
-  
+
   const PreviousPage = () => {
     setisTouch(false);
-    if(isSoundPlay){
+    if (isSoundPlay) {
       return;
-    }else{
+    } else {
       if (currentPage > 0) {
-        setColoredWords([]);
         setCurrentPage((prevCurrentPage) => {
-        const newCurrentPage = prevCurrentPage - 1;
-        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
-        setTouchables(data.pages[newCurrentPage].touchables);
-        setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
-        setImage2(IMAGE_REQUIRE[data.pages[newCurrentPage].backgroundName]);
-        return newCurrentPage;
-      });
+          const newCurrentPage = prevCurrentPage - 1;
+          setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
+          return newCurrentPage;
+        });
       } else {
         ToastAndroid.show("Đây là trang đầu tiên rồi", ToastAndroid.SHORT);
       }
     }
-    
+
   };
   const NextPage = () => {
     setisTouch(false);
-    if(isSoundPlay){
+    if (isSoundPlay) {
       return;
-    }else{
-    if (currentPage < data.pages.length - 1) {
-      setColoredWords([]);
-      setCurrentPage((prevCurrentPage) => {
-        const newCurrentPage = prevCurrentPage + 1;
-        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
-        setTouchables(data.pages[newCurrentPage].touchables);
-        setSyncData(data.pages[newCurrentPage].contents[0].sync_data);
-        setImage2(IMAGE_REQUIRE[data.pages[newCurrentPage].backgroundName]);
-        return newCurrentPage;
-      });
     } else {
-      ToastAndroid.show("Đây là trang cuối rồi", ToastAndroid.SHORT);
+      if (currentPage < data.pages.length - 1) {
+        setCurrentPage((prevCurrentPage) => {
+          const newCurrentPage = prevCurrentPage + 1;
+          setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
+          return newCurrentPage;
+        });
+      } else {
+        ToastAndroid.show("Đây là trang cuối rồi", ToastAndroid.SHORT);
+      }
     }
-    }
-    
+
   };
-
-  const HandleRefresh = () => {
-    // console.log(refreshKey);
-    setColoredWords([])
-
-    setTimeout(() => {
-      setRefreshKey(!refreshKey);
-    }, 500);
-
+  const RefreshPage = () => {
+    setisTouch(false);
+    if (isSoundPlay) {
+      return;
+    } else {
+      setTimeout(() => {
+        setRefreshKey(!refreshKey);
+      }, 500);
+    }
   };
 
   useEffect(() => {
-    setTouchables(data.pages[currentPage].touchables);
-    setSyncData(data.pages[currentPage].contents[0].sync_data);
     setContentSound(data.pages[currentPage].contents[0].sound.soundName);
-    let imageData = data.pages[currentPage].backgroundName;
-    let image = IMAGE_REQUIRE[imageData]
-    setImage2(image);
-    setIsDataLoaded(true)
+    
   }, []);
 
   useEffect(() => {
-    setIsImageLoaded(true);
-    // console.log(isDataLoaded);
-  }, [image2]);
+    playSound(contentSound)
+  }, [contentSound, refreshKey]);
 
-  //logic để thêm từ cần sync text vào mảng
-  useEffect(() => {
-    if (isImageLoaded) {
-      playSound(contentSound)
-        .then((isSuccessful) => {
-          if (isSuccessful) {
-            if (syncData.length > 5) {
-              const syncDataArray = JSON.parse(syncData);
-              syncDataArray.forEach((wordObj) => {
-                const word = wordObj.w;
-                const startTime = wordObj.s;
-                const endTime = wordObj.e;
-                setTimeout(() => {
-                  setColoredWords((prevWords) => [...prevWords, word]);
-                  setTimeout(() => {
-                    setColoredWords((prevWords) => prevWords.filter((w) => w !== word));
-                  }, endTime - startTime);
-                }, startTime);
-              });
-            }
-          }
-        });
-    }
-  }, [contentSound, syncData, refreshKey]);
-
-  //render text khi logic sync text chạy, render theo mảng coloredWords
-  useEffect(() => {
-    if (isImageLoaded) {
-      if (syncData.length > 5) {
-        const syncDataArray = JSON.parse(syncData);
-        const updatedTextElements = syncDataArray.map((wordObj, index) => {
-          const word = wordObj.w;
-          return (
-            <Text
-              key={index}
-              style={{
-                fontSize: 30,
-                color: coloredWords.includes(word) ? 'red' : 'black',
-              }}
-            >
-              {word}{' '}
-            </Text>
-          );
-        });
-        setTextElements(updatedTextElements);
-      }
-    }
-  }, [coloredWords, syncData, refreshKey]);
-
+  // Theo dõi sound đang chạy và unloadAsync
   useEffect(() => {
     let soundUnloadHandler;
-  
     if (sound) {
       soundUnloadHandler = () => {
-        // console.log('Unloading Sound');
         sound.unloadAsync();
       };
-  
+
       sound.setOnPlaybackStatusUpdate((status) => {
         if (status.didJustFinish) {
           setIsSoundPlaying(false);
         }
       });
     }
-  
     return () => {
       if (soundUnloadHandler) {
         soundUnloadHandler();
       }
     };
   }, [sound]);
-  
-  
-
-  
 
   async function playSound(DATA) {
     try {
@@ -212,20 +127,19 @@ export default function DetailStoryScreen({ route }) {
       await sound.playAsync();
       return true;
     } catch (error) {
-      console.error('Lỗi khi chạy âm thanh:', error);
+      console.log(); ('Lỗi khi chạy âm thanh:', error);
       return false;
-    } 
+    }
   }
-
 
   function checkTouch(x, y) {
     const screenWidth = 836.1904761904761;
     const screenHeight = 411.42857142857144;
     const xScale = width / screenWidth;
     const yScale = height / screenHeight;
-    
+
     let resouce = [false, "", ""];
-    for (const touchable of touchables) {
+    for (const touchable of data.pages[currentPage].touchables) {
       const { pivot } = touchable;
       const { sound } = touchable;
       const positionX = parseInt(pivot.positionX, 10);
@@ -245,29 +159,18 @@ export default function DetailStoryScreen({ route }) {
         y <= scaledPositionY + scaledTouchHeight
       ) {
         resouce = [true, touchable.data, sound.soundName];
-}
+      }
     }
     return resouce;
   }
-  function handleClick(word, soundName) {
 
-    setColoredWords([]);
+  function handleClick(word, soundName) {
     setWord(word);
-    setColoredWords((prevWords) => [...prevWords, word]);
+    setOnTouch(!onTouch);
     if (DATA_REQUIRE[soundName]) {
       playSound(soundName)
     }
-
-    if (timeoutIdForSync) {
-      clearTimeout(timeoutIdForSync);
-    }
-    timeoutIdForSync = setTimeout(() => {
-      setColoredWords((prevWords) => prevWords.filter((w) => w !== word));
-      timeoutIdForSync = null;
-    }, 2000);
-
   }
-
 
   const touchHandler = useTouchHandler({
     onStart: ({ x, y }) => {
@@ -282,7 +185,7 @@ export default function DetailStoryScreen({ route }) {
         cy.current = y;
         handleClick(resouce[1], resouce[2]);
         console.log(timeoutIdForTouch);
-        if(timeoutIdForTouch){
+        if (timeoutIdForTouch) {
           clearTimeout(timeoutIdForTouch);
         }
         setisTouch(true);
@@ -299,64 +202,52 @@ export default function DetailStoryScreen({ route }) {
       const distanceX = onStartX - x;
       const distanceY = onStartY - y;
 
-      if (distanceX > 120) {
+      if (distanceX > 20) {
         NextPage();
         return
       }
-      if (distanceX < -120) {
+      if (distanceX < -20) {
         PreviousPage();
         return
       }
-      if (distanceY < -120) {
-        HandleRefresh();
+      if (distanceY < -20) {
+        RefreshPage();
         return
       }
-      
     },
-
-
-  }, [data, touchables,sound, onStartX, onStartY, currentPage,isTouch, isSoundPlay, image2]);
+  }, [data, sound, onStartX, onStartY, currentPage, isTouch, isSoundPlay]);
 
   return (
-
     <View style={{ flex: 1, position: "relative" }}>
-      {isDataLoaded && (
-        <View style={{ flex: 1 }}>
-          <Canvas style={{ flex: 1 }} onTouch={touchHandler} >
-            <Image
-              image={imageX}
-              fit="fill"
-              width={width}
-              height={height}
+      <View style={{ flex: 1 }}>
+        <Canvas style={{ flex: 1 }} onTouch={touchHandler} >
+          
+          <Image
+            image={imageX}
+            fit="fill"
+            width={width}
+            height={height}
+          />
+          <SyncText
+            syncData={data.pages[currentPage].contents[0].sync_data}
+            word={word}
+            onTouch={onTouch}
+            refresh={refreshKey}
+            content={data.pages[currentPage].contents[0].content}
+          ></SyncText>
 
-            />
-
-            {isTouch && (
-              <CanvasText
-                x={cx.current - 30}
-                y={cy.current - 30}
-                text={word}
-                font={font}
-                color="black"
-              >
-              </CanvasText>
-            )}
-          </Canvas>
-          <View style={{
-            position: 'absolute',
-            width: width,
-            marginTop: 40,
-          }}>
-            <View style={{
-              width: width,
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}>
-              {textElements}
-            </View>
-          </View>
-        </View>
-      )}
+          {isTouch && (
+            <CanvasText
+              x={cx.current - 30}
+              y={cy.current - 30}
+              text={word}
+              font={font}
+              color="black"
+            >
+            </CanvasText>
+          )}
+        </Canvas>
+      </View>
     </View>
   );
 }
