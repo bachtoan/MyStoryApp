@@ -1,27 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import {
-  Text as CanvasText,
-  useFont,
- 
-} from "@shopify/react-native-skia";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 
-export default function SyncText({ syncData, word, onTouch, refresh,content }) {
-  const font = useFont(require("../assets/font/Mooli-Regular.ttf"), 30);
-  let lableWidth = 0;
+export default function SyncText({ syncData, word, onTouch, refresh }) {
+  //onTouch nhận giá trị là số, khởi đầu là số 0
 
   const [coloredWords, setColoredWords] = useState([]);
   const [textElements, setTextElements] = useState([]);
-  const { width, height } = Dimensions.get("window");
-  
-  
-    if (font) {
-      lableWidth = font.getTextWidth(content)
-    }
-  
-
   useEffect(() => {
-    setColoredWords([]);
+    if(onTouch == 0){
+      return;
+    }
     setColoredWords((prevWords) => [...prevWords, word]);
     const timeoutId = setTimeout(() => {
       setColoredWords((prevWords) => prevWords.filter((w) => w !== word));
@@ -31,6 +20,7 @@ export default function SyncText({ syncData, word, onTouch, refresh,content }) {
   }, [word, onTouch]);
 
   useEffect(() => {
+    setColoredWords([])
     if (syncData.length > 5) {
       const syncDataArray = JSON.parse(syncData);
       syncDataArray.forEach((wordObj) => {
@@ -44,36 +34,31 @@ export default function SyncText({ syncData, word, onTouch, refresh,content }) {
       });
     }
   }, [syncData,refresh]);
+
   useEffect(() => {
     if (syncData.length > 5) {
       const syncDataArray = JSON.parse(syncData);
-      let xPosition = 0;
-  
       const updatedTextElements = syncDataArray.map((wordObj, index) => {
         const { w: word } = wordObj;
-        const wordWidth = font?.getTextWidth(word) + font?.getTextWidth(" ");
-  
-        const textElement = (
-          <CanvasText
-            key={index}
-            x={width/2 - lableWidth/2 + xPosition}
-            y={60}
-            text={word}
-            font={font}
-            color = {coloredWords.includes(word) ? 'red' : 'black'}
-          />
+        return (
+          <Animatable.Text
+          key={index}
+          style={{
+            fontSize: 30,
+            color: coloredWords.includes(word) ? 'red' : 'black',
+          }}
+          animation={coloredWords.includes(word) && onTouch>0 ? 'bounce' : null}
+          duration={1000}
+        >
+          {word}{' '}
+        </Animatable.Text>
         );
-  
-        xPosition += wordWidth;
-  
-        return textElement;
       });
-  
       setTextElements(updatedTextElements);
     }
   }, [coloredWords]);
 
-  return textElements;
+  return <View style={{ flexDirection: 'row' }}>{textElements}</View>;
 }
 
 const styles = StyleSheet.create({});
