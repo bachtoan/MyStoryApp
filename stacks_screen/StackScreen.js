@@ -18,6 +18,9 @@ import DemoLatTrang from '../my_component/DemoLatTrang';
 import Page1 from '../demo/Page1';
 import SettingScreen from '../source/SettingScreen';
 import StoryManager from '../source/StoryManager';
+import IconStoryScreen from '../source/IconStoryScreen';
+import DemoGaf from '../my_component/DemoGaf';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -25,7 +28,7 @@ const Stack = createNativeStackNavigator();
 const StackScreen = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Splash'>
+      <Stack.Navigator initialRouteName='IconStory'>
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Splash" component={SplashScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="SignUp" component={SignUpScreen} />
@@ -34,8 +37,12 @@ const StackScreen = () => {
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="List" component={ListStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Audio" component={AudioListScreen}/>
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="DetailStory" component={DetailStoryScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="IconStory" component={IconStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CoverStory" component={CoverStoryScreen} />
+
+
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CanvasSkia" component={DemoSkiaCanvas}/>
+        <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="DemoGaf" component={DemoGaf}/>
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CanvasSkiaPath" component={DemoSkiaCanvasPath}/>
         <Stack.Screen options={{ headerShown: false, orientation:"landscape"}} name="Canvas" component={DemoCanvas} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape"}} name="Lattrang" component={DemoLatTrang} />
