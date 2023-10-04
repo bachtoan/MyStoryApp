@@ -31,8 +31,13 @@ export default function PreviewStoryScreen({ route, navigation }) {
   }, []);
 
   function PlayStoryHandler() {
- 
-    navigation.navigate("DetailStory", { id: data.id, data: data })
+    if(data.genre == 0){
+      navigation.navigate("DetailStory", { id: data.id, data: data })
+      return;
+    }
+    if(data.genre == 1){
+      navigation.navigate("IconStory", { id: data.id, data: data })
+    }
    
   }
   function HandlerWhenLoading(){
