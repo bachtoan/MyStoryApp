@@ -5,43 +5,62 @@ import * as Animatable from 'react-native-animatable';
 import IconHandler from './IconHandler';
 
 
-export default function IconSyncText({syncData, duration}) {
+export default function IconSyncText({syncData, duration, refresh}) {
  
   const [coloredWords, setColoredWords] = useState();
   const [textElements, setTextElements] = useState([]);
-  const [syncText, setSyncTexts] = useState(false);
-
+  // const [syncText, setSyncTexts] = useState(false);
+  // useEffect(() => {
+  //   setSyncTexts(true)
+  // }, [])
+  
   
   useEffect(() => {
-    setSyncTexts(true)
-  }, [])
+    // Tạo một mảng để lưu trữ IDs của các timeouts
+    const timeoutIds = [];
   
-  useEffect(() => {
-    // console.log('render');
-    if (syncData.length > 5 && syncText) {
-      syncData.forEach((wordObj, index) => {
+    if (syncData.length > 5) {
+      const syncDataArray = JSON.parse(syncData);
+  
+      syncDataArray.forEach((wordObj, index) => {
         const { w: word, s: startTime, e: endTime, i: icon } = wordObj;
-        setTimeout(() => {
+  
+        const timeoutId = setTimeout(() => {
           setColoredWords(index);
         }, startTime);
-        setTimeout(() => {
+  
+        timeoutIds.push(timeoutId);
+  
+        const endTimeoutId = setTimeout(() => {
           setColoredWords(-1);
         }, duration);
+  
+        timeoutIds.push(endTimeoutId);
       });
-    }   
-    return()=>{setSyncTexts(false)}
-  }, [syncText,syncData]); 
+    }
+      return () => {
+      timeoutIds.forEach((timeoutId) => {
+        clearTimeout(timeoutId);
+      });
+    };
+  }, [refresh, syncData]);
+  
   
    
  
   useEffect(() => {
     // console.log(coloredWords); 
     if (syncData.length > 5) {
-      // const syncDataArray = JSON.parse(syncData);
-      const updatedTextElements = syncData.map((wordObj, index) => {
+      const syncDataArray = JSON.parse(syncData);
+      const updatedTextElements = syncDataArray.map((wordObj, index) => {
         const { w: word, i:icon, img:image, audio:sound } = wordObj;
         const sync = (index == coloredWords);
-        if (icon == 0) { 
+        if (icon == 1) { 
+         
+          return(
+            <IconHandler key={index} syncIcon = {sync} image = {image} word = {word} soundUrl={sound}></IconHandler>
+        )
+        }else{
           return (  
             <Animatable.Text
             key={index}
@@ -56,15 +75,11 @@ export default function IconSyncText({syncData, duration}) {
             {word}{' '}
           </Animatable.Text>
           );
-        }else{
-          return(
-              <IconHandler key={index} syncIcon = {sync} image = {image} word = {word} soundUrl={sound}></IconHandler>
-          )
         }
       });
       setTextElements(updatedTextElements);
     }
-  }, [coloredWords]);
+  }, [coloredWords]); 
 
   return (
     <View style={styles.container}>{textElements}</View>
@@ -77,6 +92,6 @@ const styles = StyleSheet.create({
     flexWrap:'wrap', 
     justifyContent:'center',
     alignItems:'center',
-    paddingHorizontal:120
+    paddingHorizontal:120,
   },
 });
