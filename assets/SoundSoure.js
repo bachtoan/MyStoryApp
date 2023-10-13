@@ -31,8 +31,19 @@ export const DATA_REQUIRE = {
     Now_we_need_to_mix_them_together: require('../assets/sound/Now_we_need_to_mix_them_together.mp3'),
     The_salad_bowl_looks_so_delicious: require('../assets/sound/The_salad_bowl_looks_so_delicious!.mp3'),
     It_fun_to_make_something_together_Now_let_s_enjoy: require('../assets/sound/It_fun_to_make_something_together_Now_let_s_enjoy.mp3'),
-
-
+    roy: require('../assets/sound/roy.mp3'),
+    milo: require('../assets/sound/milo.mp3'),
+    binocular: require('../assets/sound/binocular.mp3'),
+    magnifyingglass: require('../assets/sound/magnifyingglass.mp3'),
+    toybone: require('../assets/sound/toybone.mp3'),
+    iconSoundPage1: require('../assets/sound/iconSoundPage1.mp3'),
+    mushrooms:require('../assets/sound/mushrooms.mp3'),
+    hamburger: require('../assets/sound/hamburger.mp3'),
+    DANGER_IN_THE_JUNGLE: require('../assets/sound/DANGER_IN_THE_JUNGER.mp3'),
+    No_cried_roy_dont_eat: require('../assets/sound/No_cried_roy_dont_eat.mp3'),
+    Milo_was_chasing_a_rabbit: require('../assets/sound/Milo_was_chasing_a_rabbit.mp3'),
+    Roy_found_many_strange: require('../assets/sound/roy_found_many_strange.mp3'),
+    Sure_said_Roy_with_a: require('../assets/sound/Sure_said_Roy_with_a.mp3'),
 
 
 

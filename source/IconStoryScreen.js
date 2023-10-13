@@ -57,9 +57,8 @@ export default function IconStoryScreen({route}) {
                     .direction(Directions.LEFT)
                     .onEnd(()=>{
                         if(currentPage < data.pages.length - 1){
-                        setCurrentPage(currentPage => currentPage + 1)
-                        }
-                        
+                            setCurrentPage(currentPage => currentPage + 1)
+                        }              
                     });
     const gestureRight = Gesture.Fling()
                     .direction(Directions.RIGHT)

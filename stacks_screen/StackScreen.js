@@ -20,6 +20,7 @@ import SettingScreen from '../source/SettingScreen';
 import StoryManager from '../source/StoryManager';
 import IconStoryScreen from '../source/IconStoryScreen';
 import DemoGaf from '../my_component/DemoGaf';
+import CongratulationScreen from '../source/CongratulationScreen';
 
 
 
@@ -28,7 +29,7 @@ const Stack = createNativeStackNavigator();
 const StackScreen = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='IconStory'>
+      <Stack.Navigator initialRouteName='Splash'>
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Splash" component={SplashScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="SignUp" component={SignUpScreen} />
@@ -39,7 +40,7 @@ const StackScreen = () => {
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="DetailStory" component={DetailStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="IconStory" component={IconStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CoverStory" component={CoverStoryScreen} />
-
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Congratulation" component={CongratulationScreen} />
 
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CanvasSkia" component={DemoSkiaCanvas}/>
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="DemoGaf" component={DemoGaf}/>

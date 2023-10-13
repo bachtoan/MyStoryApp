@@ -9,14 +9,10 @@ export default function IconSyncText({syncData, duration, refresh}) {
  
   const [coloredWords, setColoredWords] = useState();
   const [textElements, setTextElements] = useState([]);
-  // const [syncText, setSyncTexts] = useState(false);
-  // useEffect(() => {
-  //   setSyncTexts(true)
-  // }, [])
+
   
   
   useEffect(() => {
-    // Tạo một mảng để lưu trữ IDs của các timeouts
     const timeoutIds = [];
   
     if (syncData.length > 5) {
@@ -49,7 +45,6 @@ export default function IconSyncText({syncData, duration, refresh}) {
    
  
   useEffect(() => {
-    // console.log(coloredWords); 
     if (syncData.length > 5) {
       const syncDataArray = JSON.parse(syncData);
       const updatedTextElements = syncDataArray.map((wordObj, index) => {

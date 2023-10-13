@@ -24,6 +24,7 @@ export default function DemoSkiaCanvasPath() {
   const [pathString2, setPathString2] = useState("");
   const [pathString3, setPathString3] = useState("");
   const [pathString4, setPathString4] = useState("");
+  const transform = [{scale:0.493},{translateY: height}];
 
 
   const cx = useValue(100);
@@ -182,10 +183,7 @@ export default function DemoSkiaCanvasPath() {
     setPathString(parseCoordinatesToPath(data));
     setPathString2(parseCoordinatesToPath(data2));
     setPathString3(parseCoordinatesToPath(data3));
-    setPathString4(parseCoordinatesToPath(data4));
-
-   
-
+    setPathString4(parseCoordinatesToPath(data4)); 
   }, []);
 
   
@@ -235,11 +233,10 @@ export default function DemoSkiaCanvasPath() {
     },
   });
 
-    const transform = [{scale:0.49},{translateY: height}];
 
 
   return (
-    <View>
+    <View style={{flex:1}}>
 
     
     <Canvas style={{flex:1 }} onTouch={touchHandler}>
@@ -271,15 +268,15 @@ export default function DemoSkiaCanvasPath() {
         </Text>
       )}
         
-        
+        <Path path={pathString} color="blue" transform={transform}/>
         <Path path={pathString2} color="blue" transform={transform}/>
         <Path path={pathString3} color="blue" transform={transform}/>
         <Path path={pathString4} color="red" transform={transform}/>
     </Canvas>
 
-    <Canvas  style={{width:200, height:200, backgroundColor:'red' }}>
+    {/* <Canvas  style={{width:200, height:200, backgroundColor:'red' }}>
         <Path path={pathString} color="blue" transform={transform}/>
-    </Canvas>
+    </Canvas> */}
 
     </View>
   );

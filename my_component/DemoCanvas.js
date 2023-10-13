@@ -31,7 +31,7 @@ export default function DemoCanvas() {
 
       const image = new CanvasImage(canvas);
       image.src =
-        "https://firebasestorage.googleapis.com/v0/b/mystory-511b4.appspot.com/o/ONwVWDqBvuLzO9JRN2rmTH1672904703776_trong.png?alt=media&token=e1365c4f-1737-4e19-ab79-c2dba8648fda";
+        "https://firebasestorage.googleapis.com/v0/b/mystory-511b4.appspot.com/o/iconPage1.png?alt=media&token=4e73ea82-f442-4a36-a89b-f7d93f8a4b9a&_gl=1*vb0s9*_ga*NTEwOTE1MjUuMTY5NTAyNzI0OA..*_ga_CW55HF8NVT*MTY5NjQwNzg0OC43LjEuMTY5NjQwNzg4MC4yOC4wLjA.";
 
       image.addEventListener("load", () => { 
         ctx.drawImage(image, 0, 0, width, height);
@@ -105,12 +105,12 @@ export default function DemoCanvas() {
       <View
         style={{
           position: "absolute",
-          width: 110,
-          height: 70,
+          width: 80,
+          height: 50, 
           //x
-          left:360,
+          left:490,
           //y
-          top: 250,
+          top: 270,
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: 'rgba(255, 0, 0, 0.5)',

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import * as Animatable from 'react-native-animatable';
 import { useState } from 'react';
@@ -64,8 +64,9 @@ export default function IconHandler({ syncIcon, word, image, soundUrl }) {
   }
   return (
     <View style={styles.container}>
+      
 
-      <TouchableOpacity onPress={touchHandler}  >
+      <Pressable onPress={touchHandler}  >
         <Animatable.View
           animation={syncIcon ? animIcon : null}
         >
@@ -104,7 +105,7 @@ export default function IconHandler({ syncIcon, word, image, soundUrl }) {
           </Animatable.Image>
 
         </Animatable.View>
-      </TouchableOpacity>
+      </Pressable>
       <View style={styles.textView}>
 
         <Animatable.Text
