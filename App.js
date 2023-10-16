@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import StackScreen from './stacks_screen/StackScreen';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-
+import { APIProvider} from './context/ContextAPI';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -26,7 +26,9 @@ export default function App() {
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      // console.log(response);
+      // console.log(notification.request.content.data);
+      
     });
 
     return () => {
@@ -34,8 +36,11 @@ export default function App() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+
   return (
+    <APIProvider>
       <StackScreen></StackScreen> 
+    </APIProvider>
   );
 }
 async function schedulePushNotification() {

@@ -10,6 +10,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { getData } from '../async_storage/MyStorage';
+import { useContext } from "react";
+import { ContextAPI } from "../context/ContextAPI";
 
 export default function SplashScreen() {
   const navigation = new useNavigation();

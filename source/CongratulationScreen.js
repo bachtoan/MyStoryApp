@@ -1,7 +1,6 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import ConfettiCannon from 'react-native-confetti-cannon';
-import Video from 'react-native-video';
 
 
 
