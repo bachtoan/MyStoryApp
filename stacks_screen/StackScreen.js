@@ -60,6 +60,16 @@ async function registerForPushNotificationsAsync() {
 
   return token;
 }
+async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "You've got mail! 📬",
+      body: 'Here is the notification body',
+      data: { data: 'goes here' },
+    },
+    trigger: { seconds: 2 },
+  });
+}
  
 const StackScreen = () => {
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -68,7 +78,7 @@ const StackScreen = () => {
   const responseListener = useRef();
 
   const prefix = Linking.createURL('/');
-  
+  console.log(prefix);
   const config = {
     screens: {
       Setting: {
@@ -88,7 +98,7 @@ const StackScreen = () => {
     config: config,
     async  getInitialURL() {
       const url = await Linking.getInitialURL();
-      // console.log("url: ", url);
+      console.log("url: ", url);
       return url;
     },
     subscribe(listener) {
@@ -132,16 +142,7 @@ const StackScreen = () => {
  
   )
 }
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: 'Here is the notification body',
-      data: { data: 'goes here' },
-    },
-    trigger: { seconds: 2 },
-  });
-}
+
 
 
 

@@ -18,33 +18,33 @@ export default function MainScreen() {
     const {screen,id, name, author, illustration, setScreen, setId, setName, setAuthor, setIllustration} = useContext(ContextAPI);
     // console.log(route.params.id);
   
-    useEffect(() => {
-      console.log("out: ",screen ,id, name, author, illustration);
-      if(screen && screen !== "Preview"){
-        console.log("here");
-        navigation.navigate(screen);
-        setScreen('');
-        setId('');
-        setAuthor('');
-        setName('');
-        setIllustration('');
-      }
+    // useEffect(() => {
+    //   console.log("out: ",screen ,id, name, author, illustration);
+    //   if(screen && screen !== "Preview"){
+    //     console.log("here");
+    //     navigation.navigate(screen);
+    //     setScreen('');
+    //     setId('');
+    //     setAuthor('');
+    //     setName('');
+    //     setIllustration('');
+    //   }
   
-      if (screen === "Preview"){
-        console.log("click: ",id, name, author, illustration);
-        if(id && name && author && illustration){
-          console.log("chạy vào đây: ", id, name, author, illustration);
-          navigation.navigate(screen, { id: id, name: name, author: author, illustration: illustration })
-          setScreen('');
-          setId('');
-          setAuthor('');
-          setName('');
-          setIllustration('');
+    //   if (screen === "Preview"){
+    //     console.log("click: ",id, name, author, illustration);
+    //     if(id && name && author && illustration){
+    //       console.log("chạy vào đây: ", id, name, author, illustration);
+    //       navigation.navigate(screen, { id: id, name: name, author: author, illustration: illustration })
+    //       setScreen('');
+    //       setId('');
+    //       setAuthor('');
+    //       setName('');
+    //       setIllustration('');
   
-        }
-      }
+    //     }
+    //   }
     
-    }, [screen, id, author, name, illustration])
+    // }, [screen, id, author, name, illustration])
 
     const getDetailStory = async (id) => {
          await fetch(API_URL + "detailstory/" + id)

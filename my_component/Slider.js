@@ -11,10 +11,12 @@ export default function Slider({setMinTime, setMaxTime}) {
         const formattedTime = `${hours}:${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
         return formattedTime;
     };
-    // useEffect(() => {
-    //     setMinTime(minutesToTime(values[0]));
-    //     setMaxTime(minutesToTime(values[1]));
-    // }, [values])
+    const minutesToTimeWithoutDot = (minutes) => {
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+        const formattedTime = `${hours}${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
+        return formattedTime;
+    };
     
 
     const CustomSliderMarkerLeft = ({ currentValue }) => (
@@ -44,8 +46,8 @@ export default function Slider({setMinTime, setMaxTime}) {
                 values={values}
                 onValuesChange={(newValues) => setValues(newValues)}
                 onValuesChangeFinish={(newValues) => {
-                    const newMinTime = minutesToTime(newValues[0]);
-                    const newMaxTime = minutesToTime(newValues[1]);
+                    const newMinTime = minutesToTimeWithoutDot(newValues[0]);
+                    const newMaxTime = minutesToTimeWithoutDot(newValues[1]);
                     setMinTime(newMinTime);
                     setMaxTime(newMaxTime);
                 }}
