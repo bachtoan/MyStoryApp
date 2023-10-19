@@ -3,11 +3,8 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { API_URL } from '../my_component/Host';
-import { useRef } from 'react';
 import Toolbar from '../my_component/Toolbar';
-import HandlerAnimation from '../my_component/HandlerAnimation'
 import { SelectList } from 'react-native-dropdown-select-list';
-import { isSelector } from '@shopify/react-native-skia';
 
 
 export default function StoryManager() {

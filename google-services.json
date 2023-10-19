@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "184145278602",
+    "project_id": "monkeystorynotify",
+    "storage_bucket": "monkeystorynotify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184145278602:android:8bc5cf07132422413c5f73",
+        "android_client_info": {
+          "package_name": "com.bachtoan.monkey"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArQ7QjwQHLRhO4ECeU8GW24eM8UHkpaHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

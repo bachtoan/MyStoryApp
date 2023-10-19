@@ -8,6 +8,8 @@ import DecorImage from '../my_component/DecorImage';
 import { IMAGE_REQUIRE } from '../assets/ImageSource';
 import Touchable from '../my_component/Touchable';
 import { Directions, Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import PromptSwipe from '../my_component/PromptSwipe';
 
 export default function IconStoryScreen({route}) {
     const [isSoundPlay, setIsSoundPlaying] = useState(false);
@@ -16,6 +18,7 @@ export default function IconStoryScreen({route}) {
     const [sound,setSound] = useState();
     const [currentPage, setCurrentPage] = useState(0);
     const [refresh, setRefresh] = useState(false);
+    const navigation = new useNavigation();
     
     useEffect(() => {
         let soundUnloadHandler;
@@ -58,7 +61,10 @@ export default function IconStoryScreen({route}) {
                     .onEnd(()=>{
                         if(currentPage < data.pages.length - 1){
                             setCurrentPage(currentPage => currentPage + 1)
-                        }              
+                        }
+                        if(currentPage == data.pages.length - 1){
+                            navigation.replace("Congratulation")
+                        }       
                     });
     const gestureRight = Gesture.Fling()
                     .direction(Directions.RIGHT)
@@ -80,9 +86,19 @@ export default function IconStoryScreen({route}) {
                 <Image style = {{width:width,height:height}} source={IMAGE_REQUIRE[data.pages[currentPage].backgroundName]} resizeMode='stretch'>
 
                 </Image>
+
             <View style={styles.decorImageView}>
-                <DecorImage decor={data.pages[currentPage].decorImage}></DecorImage>
+                <DecorImage 
+                    decor={data.pages[currentPage].decorImage}
+                    imageWidth = {data.pages[currentPage].imageWidth}
+                    imageHeight = {data.pages[currentPage].imageHeight}
+                    imageLeft = {data.pages[currentPage].imageLeft}
+                >
+                            
+
+                </DecorImage>
             </View>
+           
 
             <View style={[styles.syncTextView,{width:width}]}>
                 <IconSyncText 
@@ -99,6 +115,11 @@ export default function IconStoryScreen({route}) {
                     </Touchable>
                 </View>
             )}
+
+            {/* <View style={{position:'absolute'}}>
+                <PromptSwipe></PromptSwipe>
+            </View> */}
+            
         </View>
         </GestureDetector>
         </GestureHandlerRootView>

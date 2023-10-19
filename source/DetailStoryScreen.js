@@ -1,19 +1,10 @@
 import {
-  Button,
   Dimensions,
-  ImageBackground,
-  ScrollView,
   StyleSheet,
-  Text,
   ToastAndroid,
-  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Toolbar from "../my_component/Toolbar";
-import { API_URL } from "../my_component/Host";
-import DemoCanvas from "../my_component/DemoCanvas";
-import ConfigTouchable from "../my_component/ConfigTouchable";
 import { useNavigation } from "@react-navigation/native";
 import {
   Canvas,
@@ -48,48 +39,50 @@ export default function DetailStoryScreen({ route }) {
   const [contentSound, setContentSound] = useState([]);
   const [word, setWord] = useState([]);
   const [isSoundPlay, setIsSoundPlaying] = useState(false);
+  const navigation = new useNavigation();
 
   const imageX = useImage(
     IMAGE_REQUIRE[data.pages[currentPage].backgroundName]
   );
 
-  
+
   const PreviousPage = () => {
     setisTouch(false);
     setOnTouch(0);
-    if(isSoundPlay){
+    if (isSoundPlay) {
       return;
-    }else{
+    } else {
       if (currentPage > 0) {
         setCurrentPage((prevCurrentPage) => {
-        const newCurrentPage = prevCurrentPage - 1;
-        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
-        return newCurrentPage;
-      });
+          const newCurrentPage = prevCurrentPage - 1;
+          setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
+          return newCurrentPage;
+        });
       } else {
         ToastAndroid.show("Đây là trang đầu tiên rồi", ToastAndroid.SHORT);
       }
     }
-    
+
   };
   const NextPage = () => {
     setisTouch(false);
     setOnTouch(0);
 
-    if(isSoundPlay){
+    if (isSoundPlay) {
       return;
-    }else{
-    if (currentPage < data.pages.length - 1) {
-      setCurrentPage((prevCurrentPage) => {
-        const newCurrentPage = prevCurrentPage + 1;
-        setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
-        return newCurrentPage;
-      });
     } else {
-      ToastAndroid.show("Đây là trang cuối rồi", ToastAndroid.SHORT);
+      if (currentPage < data.pages.length - 1) {
+        setCurrentPage((prevCurrentPage) => {
+          const newCurrentPage = prevCurrentPage + 1;
+          setContentSound(data.pages[newCurrentPage].contents[0].sound.soundName);
+          return newCurrentPage;
+        });
+      } else {
+        navigation.replace('Congratulation')
+        // ToastAndroid.show("Đây là trang cuối rồi", ToastAndroid.SHORT);
+      }
     }
-    }
-    
+
   };
 
   const HandleRefresh = () => {
@@ -106,36 +99,36 @@ export default function DetailStoryScreen({ route }) {
   }, []);
 
   useEffect(() => {
-      playSound(contentSound)
-  }, [contentSound,refreshKey]);
+    playSound(contentSound)
+  }, [contentSound, refreshKey]);
 
 
 
   useEffect(() => {
     let soundUnloadHandler;
-  
+
     if (sound) {
       soundUnloadHandler = () => {
         sound.unloadAsync();
       };
-  
+
       sound.setOnPlaybackStatusUpdate((status) => {
         if (status.didJustFinish) {
           setIsSoundPlaying(false);
         }
       });
     }
-  
+
     return () => {
       if (soundUnloadHandler) {
         soundUnloadHandler();
       }
     };
   }, [sound]);
-  
-  
 
-  
+
+
+
 
   async function playSound(DATA) {
     try {
@@ -147,7 +140,7 @@ export default function DetailStoryScreen({ route }) {
     } catch (error) {
       // console.error('Lỗi khi chạy âm thanh:', error);
       return false;
-    } 
+    }
   }
 
 
@@ -156,7 +149,7 @@ export default function DetailStoryScreen({ route }) {
     const screenHeight = 411.42857142857144;
     const xScale = width / screenWidth;
     const yScale = height / screenHeight;
-    
+
     let resouce = [false, "", ""];
     for (const touchable of data.pages[currentPage].touchables) {
       const { pivot } = touchable;
@@ -178,14 +171,14 @@ export default function DetailStoryScreen({ route }) {
         y <= scaledPositionY + scaledTouchHeight
       ) {
         resouce = [true, touchable.data, sound.soundName];
-}
+      }
     }
     return resouce;
   }
 
   function handleClick(word, soundName) {
     setWord(word);
-    setOnTouch(onTouch+1);
+    setOnTouch(onTouch + 1);
     if (DATA_REQUIRE[soundName]) {
       playSound(soundName)
     }
@@ -205,7 +198,7 @@ export default function DetailStoryScreen({ route }) {
         cy.current = y;
         handleClick(resouce[1], resouce[2]);
         // console.log(timeoutIdForTouch);
-        if(timeoutIdForTouch){
+        if (timeoutIdForTouch) {
           clearTimeout(timeoutIdForTouch);
         }
         setisTouch(true);
@@ -234,11 +227,11 @@ export default function DetailStoryScreen({ route }) {
         HandleRefresh();
         return
       }
-      
+
     },
 
 
-  }, [data,sound, onStartX, onStartY, currentPage,isTouch, isSoundPlay]);
+  }, [data, sound, onStartX, onStartY, currentPage, isTouch, isSoundPlay]);
 
   return (
 
@@ -265,7 +258,7 @@ export default function DetailStoryScreen({ route }) {
               </CanvasText>
             )}
           </Canvas>
-     
+
           <View style={{
             position: 'absolute',
             width: width,
@@ -276,11 +269,11 @@ export default function DetailStoryScreen({ route }) {
               flexDirection: 'row',
               justifyContent: 'center',
             }}>
-              <SyncText 
-                syncData = {data.pages[currentPage].contents[0].sync_data}
-                word = {word}
+              <SyncText
+                syncData={data.pages[currentPage].contents[0].sync_data}
+                word={word}
                 onTouch={onTouch}
-                refresh = {refreshKey}
+                refresh={refreshKey}
               ></SyncText>
             </View>
           </View>

@@ -2,7 +2,7 @@ import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react
 import React, { useRef } from 'react'
 import Toolbar from '../my_component/Toolbar'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faBook, faFileAudio, faFileWord, faGear, faPlay, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faFileAudio,faGear, faMapLocationDot } from '@fortawesome/free-solid-svg-icons'
 import HandlerAnimation from '../my_component/HandlerAnimation'
 
 export default function SettingScreen({navigation}) {
@@ -11,6 +11,9 @@ export default function SettingScreen({navigation}) {
     }
     function OpenStoryManager(){
         navigation.navigate('StoryManager')
+    }
+    function OpenMap(){
+        navigation.navigate('Map')
     }
 
     return (
@@ -35,9 +38,9 @@ export default function SettingScreen({navigation}) {
             </View>
             <View style={styles.row}>
                 <HandlerAnimation style={styles.touchable} animation="slideInUp">
-                    <TouchableOpacity style={styles.touchable} >
-                        <FontAwesomeIcon icon={faFileWord} size={40} color='black' />
-                        <Text style={styles.text}>Content</Text>
+                    <TouchableOpacity style={styles.touchable} onPress={OpenMap}>
+                        <FontAwesomeIcon icon={faMapLocationDot} size={40} color='black' />
+                        <Text style={styles.text}>Map</Text>
                     </TouchableOpacity>
                 </HandlerAnimation>
 

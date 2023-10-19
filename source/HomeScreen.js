@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Button, Touchable, TouchableOpacity, FlatList, Image, ImageBackground, SafeAreaView } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import Toolbar from '../my_component/Toolbar';
-import { text } from '@fortawesome/fontawesome-svg-core';
 import { API_URL } from '../my_component/Host';
 import { getData } from '../async_storage/MyStorage';
 import * as Animatable from 'react-native-animatable';
@@ -9,39 +8,11 @@ import { useContext } from 'react';
 import { ContextAPI } from '../context/ContextAPI';
 
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({route, navigation }) => {
   const imageRef = useRef(null);
   const [data, setData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const {screen,id, name, author, illustration, setScreen, setId, setName, setAuthor, setIllustration} = useContext(ContextAPI);
-
-  useEffect(() => {
-    console.log("out: ",id, name, author, illustration);
-    if(screen && screen !== "Preview"){
-      console.log("here");
-      navigation.navigate(screen);
-      setScreen('');
-      setId('');
-      setAuthor('');
-      setName('');
-      setIllustration('');
-    }
-
-    if (screen === "Preview"){
-      console.log("click: ",id, name, author, illustration);
-      if(id && name && author && illustration){
-        console.log("chạy vào đây: ", id, name, author, illustration);
-        navigation.navigate(screen, { id: id, name: name, author: author, illustration: illustration })
-        setScreen('');
-        setId('');
-        setAuthor('');
-        setName('');
-        setIllustration('');
-
-      }
-    }
-  
-  }, [screen, id, author, name, illustration])
+ 
 
   const getStorys = async () => {
     await fetch(API_URL + "story")
@@ -99,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
 
 
         <View style={{ zIndex: 10 }}>
-          <Toolbar title="Home" filter={true} />
+          <Toolbar title="Story List" filter={true} />
         </View>
         {isDataLoaded && (
           <View>
@@ -107,9 +78,9 @@ const HomeScreen = ({ navigation }) => {
             ref={imageRef}
             animation="slideInUp"
             duration={1000}
-            style={{marginBottom: 100 }}
+            style={{marginBottom: 90 }}
           >
-            <FlatList style={{ paddingStart: 10, marginBottom: 100 }}
+            <FlatList style={{ paddingStart: 10, marginBottom: 90 }}
               data={data}
               numColumns={5}
               renderItem={({ item }) =>

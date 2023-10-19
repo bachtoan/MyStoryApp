@@ -11,6 +11,7 @@ export default function PreviewStoryScreen({ route, navigation }) {
   const { id, name, author, illustration } = route.params;
   const [data, setData] = useState({});
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  console.log(id, name, author, illustration);
 
   const getDetailStory = async (id) => {
     await fetch(API_URL + "detailstory/" + id)

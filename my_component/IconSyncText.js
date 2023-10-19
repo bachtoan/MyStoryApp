@@ -14,7 +14,6 @@ export default function IconSyncText({syncData, duration, refresh}) {
   
   useEffect(() => {
     const timeoutIds = [];
-  
     if (syncData.length > 5) {
       const syncDataArray = JSON.parse(syncData);
   
@@ -62,7 +61,7 @@ export default function IconSyncText({syncData, duration, refresh}) {
             style={{ 
               fontSize: 30,
               color: sync ? 'red' : 'black',  
-              paddingVertical:20
+              paddingVertical:15
             }}
             // animation={coloredWords.includes(word) && onTouch>0 ? 'bounce' : null}
             // duration={1000}
@@ -87,6 +86,6 @@ const styles = StyleSheet.create({
     flexWrap:'wrap', 
     justifyContent:'center',
     alignItems:'center',
-    paddingHorizontal:120,
+    paddingHorizontal:130,
   },
 });

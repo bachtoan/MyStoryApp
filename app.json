@@ -3,7 +3,8 @@
     "name": "MyStory",
     "slug": "MyStory",
     "version": "1.0.0",
-    "orientation": "landscape",
+    "scheme":"monkeystory",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "packagerOpts": {
@@ -21,6 +22,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package":"com.bachtoan.monkey",
+      "googleServicesFile":"./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

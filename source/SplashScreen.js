@@ -1,17 +1,13 @@
 import {
   ActivityIndicator,
-  Animated,
   Image,
   ImageBackground,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { getData } from '../async_storage/MyStorage';
-import { useContext } from "react";
-import { ContextAPI } from "../context/ContextAPI";
 
 export default function SplashScreen() {
   const navigation = new useNavigation();
@@ -21,7 +17,7 @@ export default function SplashScreen() {
       
       getData('user').then((user) => {
         if (user) {
-          navigation.replace("Home");
+          navigation.replace("Main");
 
         } else {
           navigation.replace("Login");
