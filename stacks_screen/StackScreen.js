@@ -20,6 +20,7 @@ import * as Linking from 'expo-linking';
 import MapScreen from '../source/MapScreen';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import Demo from '../source/Demo';
 
 const Stack = createNativeStackNavigator();
 Notifications.setNotificationHandler({
@@ -128,7 +129,7 @@ const StackScreen = () => {
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Home" component={HomeScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Preview" component={PreviewStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="List" component={ListStoryScreen} />
-        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Audio" component={AudioListScreen}/>
+        <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Audio" component={AudioListScreen}/>
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="DetailStory" component={DetailStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="IconStory" component={IconStoryScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="CoverStory" component={CoverStoryScreen} />
@@ -136,6 +137,8 @@ const StackScreen = () => {
         <Stack.Screen options={{ headerShown: false, orientation:"landscape"}} name="Setting" component={SettingScreen} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait"}} name="StoryManager" component={StoryManager} />
         <Stack.Screen options={{ headerShown: false, orientation:"portrait" }} name="Map" component={MapScreen} />
+        <Stack.Screen options={{ headerShown: false, orientation:"landscape" }} name="Demo" component={Demo} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

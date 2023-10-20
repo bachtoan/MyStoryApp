@@ -49,12 +49,7 @@ export default function IconSyncText({syncData, duration, refresh}) {
       const updatedTextElements = syncDataArray.map((wordObj, index) => {
         const { w: word, i:icon, img:image, audio:sound } = wordObj;
         const sync = (index == coloredWords);
-        if (icon == 1) { 
-         
-          return(
-            <IconHandler key={index} syncIcon = {sync} image = {image} word = {word} soundUrl={sound}></IconHandler>
-        )
-        }else{
+        if (!icon == 1) { 
           return (  
             <Animatable.Text
             key={index}
@@ -68,6 +63,12 @@ export default function IconSyncText({syncData, duration, refresh}) {
           >
             {word}{' '}
           </Animatable.Text>
+          );
+          
+        
+        }else{
+          return(
+            <IconHandler key={index} syncIcon = {sync} image = {image} word = {word} soundUrl={sound}></IconHandler>
           );
         }
       });

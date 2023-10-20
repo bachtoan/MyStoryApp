@@ -49,6 +49,7 @@ export default function StoryManager() {
   }
 
   const AddStory = async () => {
+    setModalVisible(false);
 
     await fetch(API_URL+"addstory", {
         method: "POST",
@@ -71,7 +72,6 @@ export default function StoryManager() {
               setpage_quantity("");
               setstoryIllustration("");
               setstoryAuthor("");
-              setModalVisible(false);
               getStorys();
             }else if (res.status === 404){
               ToastAndroid.show('Hãy nhập đủ các trường', ToastAndroid.SHORT);
@@ -83,6 +83,7 @@ export default function StoryManager() {
         })
 }
   const Update = async () => {
+    setModalUpdateVisible(false);
 
   await fetch(API_URL+"updatestory", {
       method: "POST",
@@ -106,7 +107,6 @@ export default function StoryManager() {
             setpage_quantity("");
             setstoryIllustration("");
             setstoryAuthor("");
-            setModalUpdateVisible(false);
             getStorys();
           }else if (res.status === 404){
             ToastAndroid.show('Hãy nhập đủ các trường', ToastAndroid.SHORT);
@@ -118,6 +118,7 @@ export default function StoryManager() {
       })
 }
 const Delete = async () => {
+  setModalDeleteVisible(false);
 
   await fetch(API_URL+"deletestory", {
       method: "POST",
@@ -132,7 +133,6 @@ const Delete = async () => {
       .then((res) => {
           if (res.status === 200) {
             ToastAndroid.show('Xoá thành công', ToastAndroid.SHORT);
-            setModalDeleteVisible(false);
             getStorys();
           }else if (res.status === 404){
             ToastAndroid.show('Xoá thất bại', ToastAndroid.SHORT);
@@ -151,13 +151,16 @@ const Delete = async () => {
 
 
 
-  function Item({ _id, name, author, illustration }) {
+  function Item({ _id, name, author, illustration, image }) {
+    console.log(image);
     return (
       <View style={styles.itemContainer}>
         <View style={styles.imageView}>
-          <Image style={styles.itemimage} source={{
-            uri: 'https://source.unsplash.com/random',
-          }} resizeMode='contain' />
+        {image ? ( // Kiểm tra xem image có tồn tại
+            <Image style={styles.itemimage} source={{ uri: image }} />
+          ) : (
+            <Image style={styles.itemimage} source={{ uri: 'https://play-lh.googleusercontent.com/ZavJxKDT1Bldu3NMp57MiSwe1rU7ZMcqUOCCyV7WmRfErcTiOKc7h6N_zufjHwHUDYY' }} />
+          )}
         </View>
         <View style={{flexDirection:'column', flex:2}}>
           <View style={styles.textView}>
@@ -222,7 +225,7 @@ const Delete = async () => {
                   setuId(item.id);
                 }}
               >
-                <Item name={item.name} image={item.image} _id={item.id} author={item.author} illustration={item.illustration} ></Item>
+                <Item name={item.name} image={item.coverImage} _id={item.id} author={item.author} illustration={item.illustration}></Item>
               </TouchableOpacity>
             )
             }

@@ -1,6 +1,7 @@
 import {
   Dimensions,
   StyleSheet,
+  Text,
   ToastAndroid,
   View,
 } from "react-native";
@@ -19,9 +20,12 @@ import { DATA_REQUIRE } from "../assets/SoundSoure";
 import { Audio } from 'expo-av';
 import { IMAGE_REQUIRE } from "../assets/ImageSource";
 import SyncText from "../my_component/SyncText";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import * as Animatable from 'react-native-animatable';
 
 export default function DetailStoryScreen({ route }) {
-
+  const [promt, setPromt] = useState(false);
   const cx = useValue(100);
   const cy = useValue(100);
   const { width, height } = Dimensions.get("window");
@@ -49,6 +53,8 @@ export default function DetailStoryScreen({ route }) {
   const PreviousPage = () => {
     setisTouch(false);
     setOnTouch(0);
+    setPromt(false);
+
     if (isSoundPlay) {
       return;
     } else {
@@ -67,6 +73,7 @@ export default function DetailStoryScreen({ route }) {
   const NextPage = () => {
     setisTouch(false);
     setOnTouch(0);
+    setPromt(false);
 
     if (isSoundPlay) {
       return;
@@ -87,7 +94,7 @@ export default function DetailStoryScreen({ route }) {
 
   const HandleRefresh = () => {
     setOnTouch(0);
-
+    setPromt(false);
     setTimeout(() => {
       setRefreshKey(!refreshKey);
     }, 500);
@@ -125,7 +132,19 @@ export default function DetailStoryScreen({ route }) {
       }
     };
   }, [sound]);
-
+  useEffect(() => {
+    if (!isSoundPlay) {
+      const timeoutId = setTimeout(() => {
+        setPromt(true);
+      }, 8000);
+  
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    } else {
+      setPromt(false);
+    }
+  }, [isSoundPlay]);
 
 
 
@@ -279,6 +298,29 @@ export default function DetailStoryScreen({ route }) {
           </View>
         </View>
       )}
+      {promt && (
+                <View style={{position:'absolute',top:height/3,width:width, flexDirection:'row' ,justifyContent:'space-between'}}>
+                <Animatable.View
+                    animation="slideInLeft"
+                    duration={3000}
+                    iterationCount="infinite"
+                    style={{marginLeft:100, alignItems:'center'}}
+                >
+                    <FontAwesomeIcon icon={faArrowRight} size={50} color='lightblue'/>
+                    <Text>Vuốt</Text>
+
+                </Animatable.View>
+                <Animatable.View
+                    animation="slideInRight"
+                    duration={3000}
+                    iterationCount="infinite"
+                    style={{marginRight:100, alignItems:'center'}}
+                >
+                    <FontAwesomeIcon icon={faArrowLeft} size={50} color='lightblue' />
+                    <Text>Vuốt</Text>
+                </Animatable.View>
+            </View>
+            )}
     </View>
   );
 }

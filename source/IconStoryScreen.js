@@ -10,7 +10,7 @@ import Touchable from '../my_component/Touchable';
 import { Directions, Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import PromptSwipe from '../my_component/PromptSwipe';
-import { Canvas, useTouchHandler, useValue } from '@shopify/react-native-skia';
+import { Canvas, Path, Shadow, useTouchHandler, useValue } from '@shopify/react-native-skia';
 import PageCurl from '../my_component/PageCurl';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +27,8 @@ export default function IconStoryScreen({route}) {
     const navigation = new useNavigation();
     const cx = useValue(0);
     const cy = useValue(0);
+    const [animPath, setAnimPath] = useState('');
+      const [layer, setLayer] = useState(0);
     useEffect(() => {
         let soundUnloadHandler;
     
@@ -69,6 +71,7 @@ export default function IconStoryScreen({route}) {
                         if(currentPage < data.pages.length - 1){
                             setCurrentPage(currentPage => currentPage + 1);
                             setPromt(false);
+
                         }
                         if(currentPage == data.pages.length - 1){
                             navigation.replace("Congratulation")
@@ -80,6 +83,7 @@ export default function IconStoryScreen({route}) {
                         if(currentPage > 0){
                             setCurrentPage(currentPage => currentPage - 1);
                             setPromt(false);
+
                         }                        
                     });
     const gestureDown = Gesture.Fling()
@@ -87,35 +91,65 @@ export default function IconStoryScreen({route}) {
                     .onEnd(()=>{setRefresh(!refresh);setPromt(false);});
 
     const gesture = Gesture.Simultaneous(gestureLeft,gestureRight,gestureDown);
-    const [gestureDir, setGestureDir] = useState(0)
-    // const touchHandler = useTouchHandler({
-    //     onStart: ({ x, y }) => {
-    //         cx.current = x;
-    //         cy.current = y;
-    //         if (x > width - width / 3) setCurrentPage(1);
-    //         if (x < width / 3) setGestureDir(-1);
-    //     },
-        
-    //   }, [gestureDir]);
+
 
     useEffect(() => {
         if (!isSoundPlay) {
-          // Nếu isSoundPlay là false, đợi 5 giây trước khi đặt promt thành true
           const timeoutId = setTimeout(() => {
             setPromt(true);
-          }, 10000);
+          }, 6000);
       
-          // Cleanup effect để hủy bỏ setTimeout nếu component bị unmounted hoặc isSoundPlay thay đổi.
           return () => {
             clearTimeout(timeoutId);
           };
         } else {
-          // Nếu isSoundPlay là true, đặt promt thành false ngay lập tức.
           setPromt(false);
         }
       }, [isSoundPlay]);
+     
+      
+  
+    //   let gestureDir = 0;
+    //   const gestureAnim = (dir, absX, absY) => {
+    //         if (dir == 1) {
+    //           let A = { x: absX, y: absY }
+    //           let C = { x: (width - ((width - absX + absY / 4) / 7)), y: 0 }
+    //           let B = { x: A.x + (C.x - A.x) / 4, y: height }
+    //           let fixCurve1 = { x: A.x + (C.x - A.x) / 2, y: C.y + (A.y - C.y) / 1.5 };
+    //           let fixCurve2 = { x: B.x, y: A.y + (B.y - A.y) / 1.25 };
+    //           setAnimPath('M ' + A.x + ' ' + A.y + ' Q ' + fixCurve1.x + ' ' + fixCurve1.y + ' ' + C.x + ' ' + C.y + ' L ' + B.x + ' ' + B.y + ' Q ' + fixCurve2.x + ' ' + fixCurve2.y + ' ' + A.x + ' ' + A.y + ' Z');
+    //         }
+    //     if (dir == -1) {
+    //         setAnimPath('M ' + absX + ' ' + absY + ' L ' + (absX * 0.5) + ' ' + height + ' L ' + (absX * 0.3) + ' 0' + ' Z');
+    //     }
+    //   }
     
-    console.log(isSoundPlay);
+    
+    //   const touchHandler = useTouchHandler({
+    //     onStart: ({ x, y }) => {
+    
+    //       console.log(x);
+    //       setLayer(1)
+    //       if (x > width - width / 3) gestureDir = 1; 
+    //       if (x < width / 3) gestureDir = -1;
+    //     },
+    
+    //     onActive: ({ x, y }) => {
+          
+    //       if (gestureDir != 0) { // if use intend to change page , trigger the aim
+    //         gestureAnim(gestureDir, Math.round(x), Math.round(y))
+    //       }
+    //     },
+    
+    //     onEnd: () => {
+    //       setLayer(0)
+    //       gestureDir = 0;
+    //       setAnimPath('');
+    //     }
+    
+    
+    //   })
+    
     return (
         <GestureHandlerRootView style={{ flex: 1,position: "relative"}} >
             <GestureDetector gesture={gesture} >
@@ -153,9 +187,29 @@ export default function IconStoryScreen({route}) {
                 </View>
             )}
            
-            {/* <Canvas style={{flex:1, width:width, height:height, position:'absolute'}} onTouch={touchHandler}>
-                <PageCurl dir={gestureDir} x={cx.current} y={cy.current} ></PageCurl>
-            </Canvas> */}
+           {/* <Canvas style={{ position: "absolute", width: "100%", height: "100%", zIndex: layer}} onTouch={touchHandler}>
+       
+
+        <Path
+          path={animPath}
+          color={'#eee4b0'}
+        >
+          <Shadow
+            dx={25}
+            dy={15}
+            blur={35}
+            color="black"
+          />
+          <Shadow
+            inner
+            dx={-35}
+            dy={0}
+            blur={25}
+            color="#93b8c4"
+          />
+        </Path>
+
+      </Canvas> */}
             {promt && (
                 <View style={{position:'absolute',top:height/3,width:width, flexDirection:'row' ,justifyContent:'space-between'}}>
                 <Animatable.View
