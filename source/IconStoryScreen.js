@@ -10,6 +10,8 @@ import Touchable from '../my_component/Touchable';
 import { Directions, Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import PromptSwipe from '../my_component/PromptSwipe';
+import { Canvas, useTouchHandler, useValue } from '@shopify/react-native-skia';
+import PageCurl from '../my_component/PageCurl';
 
 export default function IconStoryScreen({route}) {
     const [isSoundPlay, setIsSoundPlaying] = useState(false);
@@ -19,7 +21,8 @@ export default function IconStoryScreen({route}) {
     const [currentPage, setCurrentPage] = useState(0);
     const [refresh, setRefresh] = useState(false);
     const navigation = new useNavigation();
-    
+    const cx = useValue(0);
+    const cy = useValue(0);
     useEffect(() => {
         let soundUnloadHandler;
     
@@ -78,15 +81,24 @@ export default function IconStoryScreen({route}) {
                     .onEnd(()=>{setRefresh(!refresh)});
 
     const gesture = Gesture.Simultaneous(gestureLeft,gestureRight,gestureDown);
-
+    const [gestureDir, setGestureDir] = useState(0)
+    const touchHandler = useTouchHandler({
+        onStart: ({ x, y }) => {
+            cx.current = x;
+            cy.current = y;
+            if (x > width - width / 3) setCurrentPage(1);
+            if (x < width / 3) setGestureDir(-1);
+        },
+        
+      }, [gestureDir]);
     return (
         <GestureHandlerRootView style={{ flex: 1,position: "relative"}} >
-            <GestureDetector gesture={gesture}>
+            <GestureDetector gesture={gesture} >
             <View style={{ flex: 1}}> 
                 <Image style = {{width:width,height:height}} source={IMAGE_REQUIRE[data.pages[currentPage].backgroundName]} resizeMode='stretch'>
 
                 </Image>
-
+            
             <View style={styles.decorImageView}>
                 <DecorImage 
                     decor={data.pages[currentPage].decorImage}
@@ -115,7 +127,10 @@ export default function IconStoryScreen({route}) {
                     </Touchable>
                 </View>
             )}
-
+           
+            {/* <Canvas style={{flex:1, width:width, height:height, position:'absolute'}} onTouch={touchHandler}>
+                <PageCurl dir={gestureDir} x={cx.current} y={cy.current} ></PageCurl>
+            </Canvas> */}
             {/* <View style={{position:'absolute'}}>
                 <PromptSwipe></PromptSwipe>
             </View> */}

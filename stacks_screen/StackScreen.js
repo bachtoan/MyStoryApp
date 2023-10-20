@@ -76,7 +76,8 @@ const StackScreen = () => {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-
+  registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+  console.log(expoPushToken);
   const prefix = Linking.createURL('/');
   console.log(prefix);
   const config = {

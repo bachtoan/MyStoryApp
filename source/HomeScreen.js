@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, Touchable, TouchableOpacity, FlatList, Image, ImageBackground, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, View, Button, Touchable, TouchableOpacity, FlatList, Image, ImageBackground, SafeAreaView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import Toolbar from '../my_component/Toolbar';
 import { API_URL } from '../my_component/Host';
@@ -45,23 +45,23 @@ const HomeScreen = ({route, navigation }) => {
     // }); 
 
   }, []);
-
-  function Item({ _id, name }) {
+  function Item({ _id, name, image }) {
     return (
       <View style={styles.itemContainer}>
         <View style={styles.imageView}>
-          <Image style={styles.itemimage} source={{
-            uri: 'https://source.unsplash.com/random',
-          }} />
+          {image ? ( // Kiểm tra xem image có tồn tại
+            <Image style={styles.itemimage} source={{ uri: image }} />
+          ) : (
+            <Image style={styles.itemimage} source={{ uri: 'https://play-lh.googleusercontent.com/ZavJxKDT1Bldu3NMp57MiSwe1rU7ZMcqUOCCyV7WmRfErcTiOKc7h6N_zufjHwHUDYY' }} />
+          )}
         </View>
         <View style={styles.textView}>
           <Text style={styles.itemtext} numberOfLines={2}>{name}</Text>
         </View>
       </View>
-
-
     );
   }
+  
 
   return (
 
@@ -72,6 +72,12 @@ const HomeScreen = ({route, navigation }) => {
         <View style={{ zIndex: 10 }}>
           <Toolbar title="Story List" filter={true} />
         </View>
+        {!isDataLoaded &&(
+        <ActivityIndicator style={{marginTop:80}} size="large" color="red" />
+
+        )}
+
+
         {isDataLoaded && (
           <View>
             <Animatable.View
@@ -87,11 +93,11 @@ const HomeScreen = ({route, navigation }) => {
               (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("Preview", { id: item.id, name: item.name, author: item.author, illustration: item.illustration })
+                    navigation.navigate("Preview", { id: item.id, name: item.name, author: item.author, illustration: item.illustration, image: item.coverImage })
                   }}
                 >
  
-                  <Item name={item.name} image={item.image} _id={item.id} ></Item> 
+                  <Item name={item.name} image={item.coverImage} _id={item.id} ></Item> 
                 </TouchableOpacity>
               )
               }

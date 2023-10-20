@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -17,6 +17,16 @@ export default function StoryManager() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [selected, setSelected] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalUpdateVisible, setModalUpdateVisible] = useState(false);
+  const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+
+
+  //--
+  const [uId, setuId] = useState();
+  const [uName, setuName] = useState();
+  const [uAuthor, setuAuthor] = useState();
+  const [uIllu, setuIllu] = useState();
+  const [pages, setPages] = useState();
 
 
   const dataSelect = [
@@ -62,7 +72,7 @@ export default function StoryManager() {
               setstoryIllustration("");
               setstoryAuthor("");
               setModalVisible(false);
-              
+              getStorys();
             }else if (res.status === 404){
               ToastAndroid.show('Hãy nhập đủ các trường', ToastAndroid.SHORT);
             }           
@@ -72,6 +82,68 @@ export default function StoryManager() {
             ToastAndroid.show('Thêm mới thất bại', ToastAndroid.SHORT);
         })
 }
+  const Update = async () => {
+
+  await fetch(API_URL+"updatestory", {
+      method: "POST",
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          "id": uId,
+          "name": storyName,
+          "author": storyAuthor,
+          "illustration": storyIllustration,
+          "genre": selected,
+          "page_quantity": page_quantity,
+      })
+  })
+      .then((res) => {
+          if (res.status === 200) {
+            ToastAndroid.show('Sửa thành công', ToastAndroid.SHORT);
+            setstoryName("");
+            setpage_quantity("");
+            setstoryIllustration("");
+            setstoryAuthor("");
+            setModalUpdateVisible(false);
+            getStorys();
+          }else if (res.status === 404){
+            ToastAndroid.show('Hãy nhập đủ các trường', ToastAndroid.SHORT);
+          }           
+      })
+      .catch(e => {
+          console.log(e);
+          ToastAndroid.show('Thêm mới thất bại', ToastAndroid.SHORT);
+      })
+}
+const Delete = async () => {
+
+  await fetch(API_URL+"deletestory", {
+      method: "POST",
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          "id": uId,        
+      })
+  })
+      .then((res) => {
+          if (res.status === 200) {
+            ToastAndroid.show('Xoá thành công', ToastAndroid.SHORT);
+            setModalDeleteVisible(false);
+            getStorys();
+          }else if (res.status === 404){
+            ToastAndroid.show('Xoá thất bại', ToastAndroid.SHORT);
+          }           
+      })
+      .catch(e => {
+          console.log(e);
+          ToastAndroid.show('Xoá thất bại', ToastAndroid.SHORT);
+      })
+}
+
   useEffect(() => {
     getStorys();
     // console.log(data);
@@ -105,10 +177,7 @@ export default function StoryManager() {
 
 
 
-  // function AddStory(){
-  //   console.log(page_quantity);
-  //   console.log(storyName, storyAuthor, storyIllustration);
-  // }
+
 
 
   return (
@@ -124,6 +193,12 @@ export default function StoryManager() {
           </TouchableOpacity>
         </View>
       </View>
+      {!isDataLoaded &&(
+      <View style={{flex:1, alignItems:'center'}}>
+        <ActivityIndicator size="large" color="red" />
+      </View>
+      )}
+      
 
 
       {isDataLoaded && (
@@ -135,6 +210,16 @@ export default function StoryManager() {
             (
               <TouchableOpacity
                 onPress={() => {
+                  setModalUpdateVisible(true);
+                  setuId(item.id)
+                  setuName(item.name);
+                  setuAuthor(item.author);
+                  setuIllu(item.illustration);
+                  setPages(item.page_quantity);
+                }}
+                onLongPress={()=>{
+                  setModalDeleteVisible(true);
+                  setuId(item.id);
                 }}
               >
                 <Item name={item.name} image={item.image} _id={item.id} author={item.author} illustration={item.illustration} ></Item>
@@ -155,7 +240,6 @@ export default function StoryManager() {
             style={{
               width: 350,
               height: 430,
-              // backgroundColor:'red',
               alignItems: "center",
               flexDirection: "column",
               borderRadius: 16,
@@ -265,6 +349,199 @@ export default function StoryManager() {
           </View>
         </View>
       </Modal>
+      <Modal visible={modalUpdateVisible} transparent={true} animationType="fade">
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View
+            style={{
+              width: 350,
+              height: 430,
+              alignItems: "center",
+              flexDirection: "column",
+              borderRadius: 16,
+            }}
+          >
+            <View
+              style={{
+                width: 350,
+                backgroundColor: "#EDB7ED",
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16,
+              }}
+            >
+              <Text
+                style={{ color: "#793FDF", fontSize: 30, textAlign: "center" }}
+              >
+                Sửa truyện
+              </Text>
+            </View>
+            <View
+              style={{ width: 350, paddingBottom: 20, backgroundColor: "#EDB7ED" }}
+            >
+              <View style={styles.viewof_text_input}>
+                <TextInput
+                  placeholder={uName}
+                  onChangeText={setstoryName}
+                ></TextInput>
+              </View>
+              <View style={styles.viewof_text_input}>
+                <TextInput
+                  placeholder={uAuthor}
+                  onChangeText={setstoryAuthor}
+                ></TextInput>
+              </View>
+              <View style={styles.viewof_text_input}>
+                <TextInput
+                  placeholder={uIllu}
+                  onChangeText={setstoryIllustration}
+                ></TextInput>
+                
+              </View>
+              <View style={styles.viewof_text_input}>
+                <TextInput
+                  placeholder='Số trang'
+                  keyboardType='numeric'
+                  onChangeText={setpage_quantity}
+                ></TextInput>               
+              </View>
+                <SelectList
+                  data={dataSelect}
+                  boxStyles={styles.dropmenu}
+                  inputStyles={{ color: "white" }}
+                  dropdownStyles={{
+                    position: "absolute",
+                    alignItems:'center',
+                    width: 150,
+                    marginLeft:100,
+                    marginTop: 50,
+                    zIndex: 100,
+                    backgroundColor: "white",
+                  }}
+                  save="key"
+                  setSelected={(key) => setSelected(key)}
+                  defaultOption={{ key: "-1", value: "Thể loại" }}
+                />
+                
+              
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                flex: 1,
+                justifyContent: "space-evenly",
+                maxHeight: 60,
+                zIndex:-100
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: "#FFFD8C",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderBottomLeftRadius: 16,
+                }}
+                onPress={() => {
+                  setModalUpdateVisible(false);
+                }}
+              >
+                <Text>Đóng</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: "#FFFD8C",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderBottomRightRadius: 16,
+                }}
+                onPress={Update}
+              >
+                <Text>Lưu truyện</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal visible={modalDeleteVisible} transparent={true} animationType="fade">
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View
+            style={{
+              width: 350,
+              height: 430,
+              alignItems: "center",
+              flexDirection: "column",
+              borderRadius: 16,
+            }}
+          >
+            <View
+              style={{
+                width: 350,
+                backgroundColor: "#EDB7ED",
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16,
+              }}
+            >
+              <Text
+                style={{ color: "#793FDF", fontSize: 30, textAlign: "center" }}
+              >
+                Xoá truyện
+              </Text>
+              <Text
+                style={{ color: "#793FDF", fontSize: 30,marginTop:50,marginBottom:50, textAlign: "center" }}
+              >
+                Bạn chắc chắn muốn xoá truyện này chứ?
+              </Text>
+            </View>
+            
+              
+          
+
+            <View
+              style={{
+                flexDirection: "row",
+                flex: 1,
+                justifyContent: "space-evenly",
+                maxHeight: 60,
+                zIndex:-100
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: "#FFFD8C",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderBottomLeftRadius: 16,
+                }}
+                onPress={() => {
+                  setModalDeleteVisible(false);
+                }}
+              >
+                <Text>Đóng</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: "#FFFD8C",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderBottomRightRadius: 16,
+                }}
+                onPress={Delete}
+              >
+                <Text>Xoá truyện</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
 
     </ImageBackground>
@@ -275,7 +552,7 @@ export default function StoryManager() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   itemContainer: {
     marginBottom: 10,

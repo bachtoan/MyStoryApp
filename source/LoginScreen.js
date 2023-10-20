@@ -53,7 +53,7 @@ export default function  LoginScreen() {
                     const { user, access_token } = data;
                     saveData('user', user);
                     saveData('access_token', access_token);
-                    navigation.replace('Home')
+                    navigation.replace('Main')
                     ToastAndroid.show('Đăng nhập thành công.', ToastAndroid.SHORT);
                 } else {
                     console.log('Dữ liệu phản hồi không hợp lệ.');

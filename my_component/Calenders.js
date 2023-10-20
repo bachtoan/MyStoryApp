@@ -17,13 +17,13 @@ export default function Calenders({ visible,setVisible, setDayPicker }) {
             <View style={styles.modalContainer}>
                 <View style={styles.container}>
                     <Calendar
-
                         onDayPress={day => {
                             setSelected(day.dateString);
                         }}
                         markedDates={{
                             [selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
                         }}
+                        minDate={Date()}
                     />
                     <View style={styles.buttonView}>
                         <TouchableOpacity style={styles.button} onPress={Close}>

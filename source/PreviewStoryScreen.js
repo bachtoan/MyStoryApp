@@ -8,10 +8,10 @@ import { API_URL } from '../my_component/Host';
 
 export default function PreviewStoryScreen({ route, navigation }) {
   const imageRef = useRef(null);
-  const { id, name, author, illustration } = route.params;
+  const { id, name, author, illustration, image } = route.params;
   const [data, setData] = useState({});
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-  console.log(id, name, author, illustration);
+  // console.log(id, name, author, illustration);
 
   const getDetailStory = async (id) => {
     await fetch(API_URL + "detailstory/" + id)
@@ -59,12 +59,12 @@ export default function PreviewStoryScreen({ route, navigation }) {
             duration={1500}
             style={{ flex: 1 }}
           >
-            <Image
-              style={styles.itemimage}
-              source={{
-                uri: 'https://source.unsplash.com/random',
-              }}
-            />
+             {image ? ( // Kiểm tra xem image có tồn tại
+            <Image style={styles.itemimage} source={{ uri: image }} />
+          ) : (
+            <Image style={styles.itemimage} source={{ uri: 'https://play-lh.googleusercontent.com/ZavJxKDT1Bldu3NMp57MiSwe1rU7ZMcqUOCCyV7WmRfErcTiOKc7h6N_zufjHwHUDYY' }} />
+          )}
+            
           </Animatable.View>
         </View>
 

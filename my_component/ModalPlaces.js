@@ -34,10 +34,15 @@ export default function ModalPlaces({ visible, setModalVisible }) {
         setCalendarVisible(true);
     }
     useEffect(() => {
-        if (pickDay != "today" && pickTime == "open-now") {
+        if (pickDay != "today") {
             setPickTime('lunch');
         }
-    }, [pickDay, pickTime])
+    }, [pickDay])
+    useEffect(() => {
+        if (pickTime == "open-now") {
+            setPickDay('today');
+        }
+    }, [pickTime])
 
     async function fetchData(timeRange, _date, timeTab, dayTab, timeStart, timeEnd) {
         // console.log("-----------------------");
@@ -83,6 +88,7 @@ export default function ModalPlaces({ visible, setModalVisible }) {
         }
         
         fetchData(timeRange, _date, timeTab, dayTab, timeStart, timeEnd);
+        setModalVisible(false);
     }
     return (
         <Modal
@@ -144,7 +150,7 @@ const styles = StyleSheet.create({
         // alignItems:'center',
         paddingBottom: 20,
         backgroundColor: 'white',
-        borderWidth: 1
+        // borderWidth: 1
     },
     buttonClose: {
         position: 'absolute',
