@@ -34,11 +34,11 @@ export default function ModalPlaces({ visible, setModalVisible }) {
         setCalendarVisible(true);
     }
     useEffect(() => {
-        if (pickDay != "today") {
+        if (pickDay != "today" && pickTime =="open-now") {
             setPickTime('lunch');
         }
     }, [pickDay])
-    useEffect(() => {
+    useEffect(() => { 
         if (pickTime == "open-now") {
             setPickDay('today');
         }
