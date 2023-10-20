@@ -12,14 +12,18 @@ import { useNavigation } from '@react-navigation/native';
 import PromptSwipe from '../my_component/PromptSwipe';
 import { Canvas, useTouchHandler, useValue } from '@shopify/react-native-skia';
 import PageCurl from '../my_component/PageCurl';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import * as Animatable from 'react-native-animatable';
 
 export default function IconStoryScreen({route}) {
-    const [isSoundPlay, setIsSoundPlaying] = useState(false);
+    const [isSoundPlay, setIsSoundPlaying] = useState(true);
     const { width, height } = Dimensions.get("window");
     const {data} = route.params;
     const [sound,setSound] = useState();
     const [currentPage, setCurrentPage] = useState(0);
     const [refresh, setRefresh] = useState(false);
+    const [promt, setPromt] = useState(false);
     const navigation = new useNavigation();
     const cx = useValue(0);
     const cy = useValue(0);
@@ -63,7 +67,8 @@ export default function IconStoryScreen({route}) {
                     .direction(Directions.LEFT)
                     .onEnd(()=>{
                         if(currentPage < data.pages.length - 1){
-                            setCurrentPage(currentPage => currentPage + 1)
+                            setCurrentPage(currentPage => currentPage + 1);
+                            setPromt(false);
                         }
                         if(currentPage == data.pages.length - 1){
                             navigation.replace("Congratulation")
@@ -73,24 +78,44 @@ export default function IconStoryScreen({route}) {
                     .direction(Directions.RIGHT)
                     .onEnd(()=>{
                         if(currentPage > 0){
-                            setCurrentPage(currentPage => currentPage - 1)
+                            setCurrentPage(currentPage => currentPage - 1);
+                            setPromt(false);
                         }                        
                     });
     const gestureDown = Gesture.Fling()
                     .direction(Directions.DOWN)
-                    .onEnd(()=>{setRefresh(!refresh)});
+                    .onEnd(()=>{setRefresh(!refresh);setPromt(false);});
 
     const gesture = Gesture.Simultaneous(gestureLeft,gestureRight,gestureDown);
     const [gestureDir, setGestureDir] = useState(0)
-    const touchHandler = useTouchHandler({
-        onStart: ({ x, y }) => {
-            cx.current = x;
-            cy.current = y;
-            if (x > width - width / 3) setCurrentPage(1);
-            if (x < width / 3) setGestureDir(-1);
-        },
+    // const touchHandler = useTouchHandler({
+    //     onStart: ({ x, y }) => {
+    //         cx.current = x;
+    //         cy.current = y;
+    //         if (x > width - width / 3) setCurrentPage(1);
+    //         if (x < width / 3) setGestureDir(-1);
+    //     },
         
-      }, [gestureDir]);
+    //   }, [gestureDir]);
+
+    useEffect(() => {
+        if (!isSoundPlay) {
+          // Nếu isSoundPlay là false, đợi 5 giây trước khi đặt promt thành true
+          const timeoutId = setTimeout(() => {
+            setPromt(true);
+          }, 10000);
+      
+          // Cleanup effect để hủy bỏ setTimeout nếu component bị unmounted hoặc isSoundPlay thay đổi.
+          return () => {
+            clearTimeout(timeoutId);
+          };
+        } else {
+          // Nếu isSoundPlay là true, đặt promt thành false ngay lập tức.
+          setPromt(false);
+        }
+      }, [isSoundPlay]);
+    
+    console.log(isSoundPlay);
     return (
         <GestureHandlerRootView style={{ flex: 1,position: "relative"}} >
             <GestureDetector gesture={gesture} >
@@ -131,9 +156,31 @@ export default function IconStoryScreen({route}) {
             {/* <Canvas style={{flex:1, width:width, height:height, position:'absolute'}} onTouch={touchHandler}>
                 <PageCurl dir={gestureDir} x={cx.current} y={cy.current} ></PageCurl>
             </Canvas> */}
-            {/* <View style={{position:'absolute'}}>
-                <PromptSwipe></PromptSwipe>
-            </View> */}
+            {promt && (
+                <View style={{position:'absolute',top:height/3,width:width, flexDirection:'row' ,justifyContent:'space-between'}}>
+                <Animatable.View
+                    animation="slideInLeft"
+                    duration={3000}
+                    iterationCount="infinite"
+                    style={{marginLeft:100, alignItems:'center'}}
+                >
+                    <FontAwesomeIcon icon={faArrowRight} size={50} color='lightblue'/>
+                    <Text>Vuốt</Text>
+
+                </Animatable.View>
+                <Animatable.View
+                    animation="slideInRight"
+                    duration={3000}
+                    iterationCount="infinite"
+                    style={{marginRight:100, alignItems:'center'}}
+                >
+                    <FontAwesomeIcon icon={faArrowLeft} size={50} color='lightblue' />
+                    <Text>Vuốt</Text>
+                </Animatable.View>
+            </View>
+            )}
+            
+            
             
         </View>
         </GestureDetector>
